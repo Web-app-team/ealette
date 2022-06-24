@@ -1,16 +1,48 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as Location from 'expo-location';
 
 const FetchRestaurants: React.FC = () => {
+  const [errorMsg, setErrorMsg] = useState<string | undefined>();
+  const [latitude, setLatitude] = useState<number | undefined>(
+    35.8368658
+  );
+  const [longitude, setLongitude] = useState<number | undefined>(
+    139.6533851
+  );
   const [datas, setDatas] = useState([] as any[]);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      let { status } =
+        await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let userLocation = await Location.getCurrentPositionAsync({});
+      setLatitude(userLocation.coords.latitude);
+      setLongitude(userLocation.coords.longitude);
+    })();
+  }, []);
+
+  let location = {
+    latitude: latitude,
+    longitude: longitude,
+    latitudeDelta: 0.009,
+    longitudeDelta: 0.009,
+  };
+
   const options = {
     method: 'GET',
     url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng',
     params: {
-      latitude: '35.663908',
-      longitude: '139.746178',
-      limit: '20',
+      latitude: location.latitude,
+      longitude: location.longitude,
+      limit: '30',
       currency: 'YEN',
       distance: '1',
       open_now: 'true',
@@ -23,11 +55,12 @@ const FetchRestaurants: React.FC = () => {
         '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
     },
   };
+
   useEffect(() => {
-    (async () => {
+    (() => {
       axios
         .request(options)
-        .then(async (response: any) => {
+        .then((response: any) => {
           setDatas(response.data.data);
           console.log(response.data.data);
         })
@@ -37,34 +70,34 @@ const FetchRestaurants: React.FC = () => {
     })();
   }, []);
 
-  const d = datas.map((data: any, index: number) => {
-    return data.cuisine;
-  });
-  const result = [
-    ...datas
-      .reduce((r, { cuisine }) => {
-        (cuisine || []).forEach((o: any) => {
-          r.has(o.name) || r.set(o.name, { ...o });
-          r.get(o.name);
-        });
-
-        return r;
-      }, new Map())
-      .values(),
-  ];
-
-  // console.log(result);
-
-  const itemList = result.map(({ name }) => name);
-
-  console.log(itemList);
-
-  // const d = datas.map((m) => {
-  //   m.cuisine.forEach((p: any) => Object.assign(m, p));
-  //   delete m.cuisine;
+  // const d = datas.map((data: any, index: number) => {
+  //   return data.cuisine;
   // });
 
-  // console.log(d);
+  // const result = [
+  //   ...datas
+  //     .reduce((r, { cuisine }) => {
+  //       (cuisine || []).forEach((o: any) => {
+  //         r.has(o.name) || r.set(o.name, { ...o });
+  //         r.get(o.name);
+  //       });
+
+  //       return r;
+  //     }, new Map())
+  //     .values(),
+  // ];
+
+  // const itemList = result.map(({ name }) => name);
+
+  const staticData = datas.map((item) => {
+    return {
+      latitude: Number(item.latitude),
+      longitude: Number(item.longitude),
+    };
+  });
+  staticData.splice(4, 1);
+  staticData.splice(10, 1);
+  staticData.splice(16, 1);
   return (
     <View>
       <Text style={styles.paragraph2}>

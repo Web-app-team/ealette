@@ -19,7 +19,7 @@ const MapScreen: React.FC = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    const user = async () => {
       let { status } =
         await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -31,7 +31,8 @@ const MapScreen: React.FC = () => {
       setLatitude(userLocation.coords.latitude);
       setLongitude(userLocation.coords.longitude);
       setUserLocation(userLocation.coords);
-    })();
+    };
+    user();
   }, []);
 
   let text = 'Waiting..';
@@ -53,7 +54,7 @@ const MapScreen: React.FC = () => {
     params: {
       latitude: latitude,
       longitude: longitude,
-      limit: '20',
+      limit: '30',
       currency: 'YEN',
       distance: '1',
       open_now: 'true',
@@ -67,16 +68,13 @@ const MapScreen: React.FC = () => {
     },
   };
 
-  const delay = 5;
   useEffect(() => {
     (() => {
-      let timer1 = setTimeout(() => setShow(true), delay * 1000);
       axios
         .request(options)
         .then((response: any) => {
           setDatas(response.data.data);
-          // console.log(response.data.data);
-          clearTimeout(timer1);
+          console.log(response.data.data);
         })
         .catch((error: any) => {
           console.error(error);
@@ -102,15 +100,6 @@ const MapScreen: React.FC = () => {
 
   const itemList = result.map(({ name }) => name);
 
-  // console.log(itemList);
-
-  // const d = datas.map((m) => {
-  //   m.cuisine.forEach((p: any) => Object.assign(m, p));
-  //   delete m.cuisine;
-  // });
-
-  // console.log(d);
-
   const staticData = datas.map((item) => {
     return {
       latitude: Number(item.latitude),
@@ -120,7 +109,6 @@ const MapScreen: React.FC = () => {
   staticData.splice(4, 1);
   staticData.splice(10, 1);
   staticData.splice(16, 1);
-  // console.log(staticData);
 
   const StyledMarker = () => {
     return (

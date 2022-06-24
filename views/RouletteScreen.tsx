@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View } from 'react-native';
 import AppButton from '../components/AppButton';
 import { useState } from 'react';
+import FetchRestaurants from './FetchRestaurants';
 
 const RouletteScreen: React.FC = () => {
   // const navigation: any = useNavigation();
@@ -48,6 +49,9 @@ const RouletteScreen: React.FC = () => {
   return (
     <View style={styles.screen}>
       <Text style={styles.text}>Roulette Screen</Text>
+      <View>
+        <FetchRestaurants />
+      </View>
     </View>
   );
 };
