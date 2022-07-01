@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   appButtonContainer: {
     alignSelf: 'center',
     elevation: 8,
-    backgroundColor: '#FFCA0B',
+    backgroundColor: '#008B34',
     borderRadius: 30,
     paddingVertical: 10,
     paddingHorizontal: 12,

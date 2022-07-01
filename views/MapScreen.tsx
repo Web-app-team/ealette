@@ -1,6 +1,6 @@
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as Location from 'expo-location';
 import axios from 'axios';
 
@@ -18,22 +18,55 @@ const MapScreen: React.FC = () => {
   const [datas, setDatas] = useState([] as any[]);
   const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    const user = async () => {
-      let { status } =
-        await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+  const getLocationAsync = async () => {
+    let { status } =
+      await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
 
-      let userLocation = await Location.getCurrentPositionAsync({});
-      setLatitude(userLocation.coords.latitude);
-      setLongitude(userLocation.coords.longitude);
-      setUserLocation(userLocation.coords);
+    let userLocation = await Location.getCurrentPositionAsync({});
+    setLatitude(userLocation.coords.latitude);
+    setLongitude(userLocation.coords.longitude);
+    setUserLocation(userLocation.coords);
+  };
+
+  const getRestaurants = useCallback(async () => {
+    const options = {
+      method: 'GET',
+      url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng',
+      params: {
+        latitude: latitude,
+        longitude: longitude,
+        limit: '30',
+        currency: 'YEN',
+        distance: '1',
+        open_now: 'true',
+        lunit: 'km',
+        lang: 'ja_JP',
+      },
+      headers: {
+        'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
+        'X-RapidAPI-Key':
+          '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
+      },
     };
-    user();
+
+    const response = await axios.request(options);
+    if (response) {
+      setDatas(response.data.data);
+      console.log(response.data.data);
+    }
+  }, [latitude, longitude]);
+
+  useEffect(() => {
+    getLocationAsync();
   }, []);
+
+  useEffect(() => {
+    getRestaurants().catch(console.error);
+  }, [getRestaurants]);
 
   let text = 'Waiting..';
   if (errorMsg) {
@@ -47,40 +80,6 @@ const MapScreen: React.FC = () => {
     latitudeDelta: 0.009,
     longitudeDelta: 0.009,
   };
-
-  const options = {
-    method: 'GET',
-    url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng',
-    params: {
-      latitude: latitude,
-      longitude: longitude,
-      limit: '30',
-      currency: 'YEN',
-      distance: '1',
-      open_now: 'true',
-      lunit: 'km',
-      lang: 'ja_JP',
-    },
-    headers: {
-      'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
-      'X-RapidAPI-Key':
-        '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
-    },
-  };
-
-  useEffect(() => {
-    (() => {
-      axios
-        .request(options)
-        .then((response: any) => {
-          setDatas(response.data.data);
-          console.log(response.data.data);
-        })
-        .catch((error: any) => {
-          console.error(error);
-        });
-    })();
-  }, []);
 
   const d = datas.map((data: any, index: number) => {
     return data.cuisine;

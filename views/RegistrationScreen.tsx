@@ -119,61 +119,6 @@ const RegistrationScreen: React.FC = () => {
         {passwordError.length > 0 ? (
           <Text>{passwordError}</Text>
         ) : null}
-        <Text>生年月日</Text>
-        <View>
-          <AppButton
-            onPress={showDatepicker}
-            title="Show date picker!"
-          />
-        </View>
-        {/* {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            display="default"
-            style={{
-              width: '100%',
-              justifyContent: 'baseline',
-              marginLeft: '-35%',
-              alignSelf: 'baseline',
-            }}
-            neutralButtonLabel="clear"
-            onChange={onChange}
-          />
-        )} */}
-        <View style={styles.birthdayView}>
-          <TextInput
-            value={date.getFullYear().toLocaleString()}
-            // onChangeText={(newPassword) =>
-            //   onChangePassword(newPassword)
-            // }
-            style={styles.textInput}
-          ></TextInput>
-          <TextInput
-            value={date.getDate().toLocaleString()}
-            // onChangeText={(newPassword) =>
-            //   onChangePassword(newPassword)
-            // }
-            style={styles.textInput}
-          ></TextInput>
-          <TextInput
-            value={date.getDay().toLocaleString()}
-            // onChangeText={(newPassword) =>
-            //   onChangePassword(newPassword)
-            // }
-            style={styles.textInput}
-          ></TextInput>
-        </View>
-        <Text>性別</Text>
-        <TextInput
-          //   value={password}
-          //   onChangeText={(newPassword) =>
-          //     onChangePassword(newPassword)
-          //   }
-          //   secureTextEntry
-          style={styles.textInput}
-        ></TextInput>
       </View>
       <View>
         <AppButton title="Register" onPress={handleSignUp} />

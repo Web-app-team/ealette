@@ -5,6 +5,46 @@ import { useState } from 'react';
 import FetchRestaurants from './FetchRestaurants';
 
 const RouletteScreen: React.FC = () => {
+  const restaurantsTypes = [
+    {
+      type: '中華料理',
+    },
+    {
+      type: 'カフェ・喫茶店',
+    },
+    {
+      type: '和食',
+    },
+    {
+      type: 'イタリアン',
+    },
+    {
+      type: 'アジア料理',
+    },
+    {
+      type: '韓国料理',
+    },
+    {
+      type: 'ヘルシー料理',
+    },
+    {
+      type: 'ファストフード',
+    },
+    {
+      type: '肉料理',
+    },
+    {
+      type: '海鮮料理',
+    },
+  ];
+
+  const [activeType, setActiveType] = useState<number | undefined>(0);
+
+  const randomType = () => {
+    const len = restaurantsTypes.length;
+    setActiveType(Math.floor(Math.random() * len));
+  };
+
   // const navigation: any = useNavigation();
   // const [mustSpin, setMustSpin] = useState(false);
   // const [prizeNumber, setPrizeNumber] = useState(0);
@@ -49,9 +89,9 @@ const RouletteScreen: React.FC = () => {
   return (
     <View style={styles.screen}>
       <Text style={styles.text}>Roulette Screen</Text>
-      <View>
-        <FetchRestaurants />
-      </View>
+      <Text>{restaurantsTypes[activeType].type}</Text>
+      <AppButton title="Go to Home" onPress={randomType} />
+      {/* <FetchRestaurants /> */}
     </View>
   );
 };

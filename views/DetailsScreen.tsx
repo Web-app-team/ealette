@@ -11,7 +11,7 @@ const DetailsScreen: React.FC = () => {
         <AppButton
           title="Go to Home"
           onPress={() => navigation.navigate('Home')}
-        ></AppButton>
+        />
       </View>
     </View>
   );
