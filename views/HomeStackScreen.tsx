@@ -15,6 +15,7 @@ const HomeStackScreen: React.FC = () => {
   const HomeStack = createNativeStackNavigator();
   const navigation: any = useNavigation();
 
+  // Subscription Check
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {

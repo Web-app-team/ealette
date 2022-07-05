@@ -58,25 +58,6 @@ const RegistrationScreen: React.FC = () => {
       });
   };
 
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate;
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  const showMode = (currentMode: any) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
-
   return (
     <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <View style={styles.loginView}>
