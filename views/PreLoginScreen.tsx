@@ -15,10 +15,12 @@ import {
   Text,
   TextInput,
   View,
+  Image,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import AppButton from '../components/AppButton';
 import { auth, db } from '../firebase';
+import { MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 
 const PreLoginScreen: React.FC = () => {
   const navigation: any = useNavigation();
@@ -103,8 +105,49 @@ const PreLoginScreen: React.FC = () => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.text}>
-        <Text>LOGO</Text>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../assets/logo.png')}
+          style={styles.cardImage}
+          resizeMode="cover"
+        />
+        <Text style={styles.header}>ealette</Text>
+
+        <Text style={styles.subHeader}>
+          <MaterialCommunityIcons
+            name="drag-horizontal-variant"
+            size={16}
+            color="black"
+          />
+          <MaterialCommunityIcons
+            name="drag-horizontal-variant"
+            size={16}
+            color="black"
+          />
+          <MaterialCommunityIcons
+            name="drag-horizontal-variant"
+            size={16}
+            color="black"
+          />
+          <Text> </Text>
+          5秒でランチ決め
+          <Text> </Text>
+          <MaterialCommunityIcons
+            name="drag-horizontal-variant"
+            size={16}
+            color="black"
+          />
+          <MaterialCommunityIcons
+            name="drag-horizontal-variant"
+            size={16}
+            color="black"
+          />
+          <MaterialCommunityIcons
+            name="drag-horizontal-variant"
+            size={16}
+            color="black"
+          />
+        </Text>
       </View>
 
       {/* Login Modal Start */}
@@ -127,7 +170,7 @@ const PreLoginScreen: React.FC = () => {
               {/* Login View Start */}
               <KeyboardAvoidingView behavior="padding">
                 <View style={styles.modalText}>
-                  <Text style={styles.header}>ログイン</Text>
+                  <Text style={styles.modalHeader}>ログイン</Text>
                   <Text>メールアドレス</Text>
                   <TextInput
                     value={email}
@@ -182,7 +225,7 @@ const PreLoginScreen: React.FC = () => {
               {/* Registration View Start */}
               <KeyboardAvoidingView behavior="padding">
                 <View style={styles.modalText}>
-                  <Text style={styles.header}>ユーザー登録</Text>
+                  <Text style={styles.modalHeader}>ユーザー登録</Text>
                   <Text>ニックネーム</Text>
                   <TextInput
                     value={nickname}
@@ -244,6 +287,7 @@ const PreLoginScreen: React.FC = () => {
       <View style={styles.buttonsBox}>
         <AppButton
           title="ログイン"
+          minWidth={Dimensions.get('window').width - 70}
           onPress={() => setLoginModalVisible(true)}
         />
         <AppButton
@@ -251,12 +295,14 @@ const PreLoginScreen: React.FC = () => {
           // size="sm"
           backgroundColor="#FFFFFF"
           color="#222222"
+          minWidth={Dimensions.get('window').width - 70}
           onPress={() => setRegistrationModalVisible(true)}
         />
-        <AppButton
+        {/* <AppButton
           title="Go to Home"
+          minWidth={Dimensions.get('window').width - 70}
           onPress={() => navigation.navigate('Home')}
-        />
+        /> */}
       </View>
     </View>
   );
@@ -265,30 +311,52 @@ const PreLoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFCA0B',
+    backgroundColor: '#FFDB4F',
   },
-  text: {
-    flex: 1,
-    justifyContent: 'center',
+  cardImage: {
+    resizeMode: 'contain',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  horizontalRule: {
+    width: 200,
+  },
+  logoContainer: {
+    flex: 3,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    marginTop: '40%',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   header: {
-    fontSize: 16,
-    marginTop: 10,
-    marginBottom: 20,
-    // flex: 2,
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 30,
+    marginBottom: 0,
   },
-  // welcome: {
-  //   fontSize: 14,
-  //   flex: 3,
-  // },
+  modalHeader: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginTop: 30,
+    marginBottom: 0,
+  },
+  subHeader: {
+    paddingLeft: 65,
+    paddingRight: 65,
+    marginTop: 23,
+    fontSize: 16,
+    textAlign: 'center',
+  },
   buttonsBox: {
+    flex: 2,
     flexDirection: 'column',
-    flexWrap: 'wrap',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginBottom: 20,
     maxWidth: '70%',
+    paddingBottom: 20,
   },
   paragraph: {
     fontSize: 18,
@@ -307,7 +375,6 @@ const styles = StyleSheet.create({
     marginBottom: -25,
   },
   modalView: {
-    // width: '100%',
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 25,
@@ -339,27 +406,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalText: {
-    // marginBottom: 15,
     textAlign: 'center',
     width: Dimensions.get('window').width - 25,
     backgroundColor: 'white',
   },
-
   textInput: {
     height: 40,
     margin: 12,
-    // borderWidth: 1,
     padding: 10,
     backgroundColor: '#F4F4F4',
     paddingHorizontal: 15,
     paddingVertical: 10,
-    // borderRadius: 10,
     elevation: 0,
     marginTop: 5,
   },
-  // loginView: {
-  //   width: '80%',
-  // },
 });
 
 export default PreLoginScreen;

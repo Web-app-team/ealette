@@ -1,4 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
 type Props = {
   onPress: VoidFunction;
@@ -6,6 +11,10 @@ type Props = {
   backgroundColor?: any;
   size?: string;
   color?: any;
+  borderRadius?: number;
+  minWidth?: any;
+  width?: any;
+  height?: any;
 };
 
 const AppButton: React.FC<Props> = ({
@@ -14,6 +23,10 @@ const AppButton: React.FC<Props> = ({
   backgroundColor,
   size,
   color,
+  borderRadius,
+  width,
+  height,
+  minWidth,
 }) => {
   return (
     <TouchableOpacity
@@ -25,6 +38,10 @@ const AppButton: React.FC<Props> = ({
           elevation: 6,
         },
         backgroundColor && { backgroundColor },
+        borderRadius && { borderRadius },
+        width && { width },
+        height && { height },
+        minWidth && { minWidth },
       ]}
       onPress={onPress}
     >
@@ -38,13 +55,14 @@ const AppButton: React.FC<Props> = ({
 const styles = StyleSheet.create({
   appButtonContainer: {
     alignSelf: 'center',
+    justifyContent: 'center',
     elevation: 8,
     backgroundColor: '#008B34',
     borderRadius: 30,
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 12,
     margin: 7,
-    minWidth: 250,
+    // minWidth: Dimensions.get('window').width - 70,
   },
   appButtonText: {
     fontSize: 14,

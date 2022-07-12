@@ -1,6 +1,18 @@
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { useCallback, useEffect, useState } from 'react';
+import MapView, {
+  Marker,
+  MarkerAnimated,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
+import {
+  Animated,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Image,
+} from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as Location from 'expo-location';
 import axios from 'axios';
 
@@ -17,20 +29,7 @@ const MapScreen: React.FC = () => {
   );
   const [datas, setDatas] = useState([] as any[]);
   const [show, setShow] = useState(false);
-
-  const getLocationAsync = async () => {
-    let { status } =
-      await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
-    }
-
-    let userLocation = await Location.getCurrentPositionAsync({});
-    setLatitude(userLocation.coords.latitude);
-    setLongitude(userLocation.coords.longitude);
-    setUserLocation(userLocation.coords);
-  };
+  const animation = useRef(new Animated.Value(0)).current;
 
   const getRestaurants = useCallback(async () => {
     const options = {
@@ -61,11 +60,37 @@ const MapScreen: React.FC = () => {
   }, [latitude, longitude]);
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
+    const getLocationAsync = async () => {
+      let { status } =
+        await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let userLocation = await Location.getCurrentPositionAsync({});
+      setLatitude(userLocation.coords.latitude);
+      setLongitude(userLocation.coords.longitude);
+      setUserLocation(userLocation.coords);
+    };
+
     getLocationAsync();
+
+    return () => {
+      source.cancel();
+    };
   }, []);
 
   useEffect(() => {
-    getRestaurants().catch(console.error);
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getRestaurants().catch(console.error);
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
   }, [getRestaurants]);
 
   let text = 'Waiting..';
@@ -81,28 +106,30 @@ const MapScreen: React.FC = () => {
     longitudeDelta: 0.009,
   };
 
-  const d = datas.map((data: any, index: number) => {
-    return data.cuisine;
-  });
-  const result = [
-    ...datas
-      .reduce((r, { cuisine }) => {
-        (cuisine || []).forEach((o: any) => {
-          r.has(o.name) || r.set(o.name, { ...o });
-          r.get(o.name);
-        });
+  // const d = datas.map((data: any, index: number) => {
+  //   return data.cuisine;
+  // });
+  // const result = [
+  //   ...datas
+  //     .reduce((r, { cuisine }) => {
+  //       (cuisine || []).forEach((o: any) => {
+  //         r.has(o.name) || r.set(o.name, { ...o });
+  //         r.get(o.name);
+  //       });
 
-        return r;
-      }, new Map())
-      .values(),
-  ];
+  //       return r;
+  //     }, new Map())
+  //     .values(),
+  // ];
 
-  const itemList = result.map(({ name }) => name);
+  // const itemList = result.map(({ name }) => name);
 
   const staticData = datas.map((item) => {
+    // console.log(item.photo);
     return {
       latitude: Number(item.latitude),
       longitude: Number(item.longitude),
+      // image: item.photo.images.small.url,
     };
   });
   staticData.splice(4, 1);
@@ -153,9 +180,49 @@ const MapScreen: React.FC = () => {
             }}
           >
             <StyledMarker />
+            {/* {item.image} */}
           </Marker>
         ))}
       </MapView>
+      {/* <Animated.ScrollView
+        horizontal={true}
+        scrollEventThrottle={1}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={100}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  x: animation,
+                },
+              },
+            },
+          ],
+          { useNativeDriver: true }
+        )}
+        style={styles.scrollView}
+        contentContainerStyle={styles.endPadding}
+      >
+        {staticData.map((marker, index) => {
+          <View style={styles.card} key={index}>
+            <Image
+              source={marker.image}
+              style={styles.cardImage}
+              resizeMode="cover"
+            />
+            <View style={styles.textContent}>
+              <Text numberOfLines={1} style={styles.cardTitle}>
+                {MarkerAnimated}
+              </Text>
+              <Text numberOfLines={1} style={styles.cardDescription}>
+                {marker}
+              </Text>
+            </View>
+          </View>;
+        })}
+      </Animated.ScrollView> */}
     </View>
   );
 };
@@ -170,6 +237,54 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+    ...StyleSheet.absoluteFillObject,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 25,
+    flex: 1,
+  },
+  scrollView: {
+    position: 'absolute',
+    bottom: 0,
+    zIndex: 100,
+    left: 0,
+    right: 0,
+    paddingVertical: 10,
+  },
+  endPadding: {
+    paddingRight: 100,
+  },
+  card: {
+    padding: 10,
+    elevation: 2,
+    backgroundColor: '#FFF',
+    marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    // shadowOffset: { x: 2, y: -2 },
+    height: 100,
+    width: 100,
+    overflow: 'hidden',
+  },
+  cardImage: {
+    flex: 3,
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
+  },
+  textContent: {
+    flex: 1,
+  },
+  cardTitle: {
+    fontSize: 12,
+    marginTop: 5,
+    fontWeight: 'bold',
+  },
+  cardDescription: {
+    fontSize: 12,
+    color: '#444',
   },
 });
 

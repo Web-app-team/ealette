@@ -13,19 +13,6 @@ import SettingsScreen from './SettingsScreen';
 
 const HomeStackScreen: React.FC = () => {
   const HomeStack = createNativeStackNavigator();
-  const navigation: any = useNavigation();
-
-  // Subscription Check
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate('Home');
-      } else {
-        navigation.navigate('PreLogin');
-      }
-    });
-    return unsubscribe;
-  }, []);
 
   return (
     <HomeStack.Navigator>

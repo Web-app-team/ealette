@@ -3,9 +3,22 @@ import { auth } from '../firebase';
 import { StyleSheet, Text, View } from 'react-native';
 import AppButton from '../components/AppButton';
 import FetchRestaurants from './FetchRestaurants';
+import { useEffect } from 'react';
 
 const HomeScreen: React.FC = () => {
   const navigation: any = useNavigation();
+
+  // Subscription Check
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate('Home');
+      } else {
+        navigation.navigate('PreLogin');
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const handleSignOut = () => {
     auth

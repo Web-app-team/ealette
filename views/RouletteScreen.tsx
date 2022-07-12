@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import FetchRestaurants from './FetchRestaurants';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import SlotMachine from '../components/SlotMachine';
 
 const RouletteScreen: React.FC = () => {
   const [userLocation, setUserLocation] = useState<
@@ -17,6 +18,7 @@ const RouletteScreen: React.FC = () => {
     139.6533851
   );
   const [datas, setDatas] = useState([] as any[]);
+  const navigation: any = useNavigation();
 
   const getLocationAsync = async () => {
     let { status } =
@@ -83,7 +85,7 @@ const RouletteScreen: React.FC = () => {
 
   const restaurantsTypes = [
     {
-      type: '中華料理',
+      type: '中華',
     },
     {
       type: 'カフェ・喫茶店',
@@ -112,6 +114,27 @@ const RouletteScreen: React.FC = () => {
     {
       type: '海鮮料理',
     },
+    {
+      type: 'スープ',
+    },
+    {
+      type: 'グリル料理',
+    },
+    {
+      type: 'ステーキ',
+    },
+    {
+      type: 'メキシコ料理',
+    },
+    {
+      type: 'イギリス料理',
+    },
+    {
+      type: '寿司',
+    },
+    {
+      type: 'フレンチ',
+    },
   ];
 
   const [activeType, setActiveType] = useState<number>(0);
@@ -119,55 +142,35 @@ const RouletteScreen: React.FC = () => {
   const randomType = () => {
     const len = restaurantsTypes.length;
     setActiveType(Math.floor(Math.random() * len));
+    console.log(restaurantsTypes[activeType].type);
   };
-
-  // const navigation: any = useNavigation();
-  // const [mustSpin, setMustSpin] = useState(false);
-  // const [prizeNumber, setPrizeNumber] = useState(0);
-
-  // const data = [
-  //   { option: '0' },
-  //   { option: '1' },
-  //   { option: '2' },
-  //   { option: '3' },
-  //   { option: '4' },
-  //   { option: '5' },
-  //   { option: '6' },
-  //   { option: '7' },
-  //   { option: '8' },
-  // ];
-  // const backgroundColors = [
-  //   '#ff8f43',
-  //   '#70bbe0',
-  //   '#0b3351',
-  //   '#f9dd50',
-  // ];
-  // const textColors = ['#0b3351'];
-  // const outerBorderColor = '#eeeeee';
-  // const outerBorderWidth = 10;
-  // const innerBorderColor = '#30261a';
-  // const innerBorderWidth = 0;
-  // const innerRadius = 0;
-  // const radiusLineColor = '#eeeeee';
-  // const radiusLineWidth = 8;
-  // const fontSize = 17;
-  // const textDistance = 60;
-  // const spinDuration = 1.0;
-
-  // const handleSpinClick = () => {
-  //   const newPrizeNumber = Math.floor(Math.random() * data.length);
-  //   console.log(newPrizeNumber);
-
-  //   setPrizeNumber(newPrizeNumber);
-  //   setMustSpin(true);
-  // };
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.text}>Roulette Screen</Text>
-
-      <Text>{restaurantsTypes[activeType].type}</Text>
-      <AppButton title="Spin" onPress={randomType} />
+      <AppButton
+        title="Go to Home"
+        onPress={() => navigation.navigate('Home')}
+      />
+      <Text style={styles.header}>ルーレット</Text>
+      {/* <SlotMachine duration={1000} /> */}
+      <View style={styles.roulette}>
+        <SlotMachine
+          text={restaurantsTypes[activeType].type}
+          range="中華料理カフェ・喫茶店和食イタリアンアジア韓国ヘルシーファストフード肉海鮮スープグリルステーキメキシコイギリス寿司フレンチ"
+        />
+      </View>
+      {/* <Text>{restaurantsTypes[activeType].type}</Text> */}
+      <View style={styles.buttonsBox}>
+        <AppButton
+          title="START"
+          onPress={randomType}
+          borderRadius={100}
+          width={150}
+          height={150}
+          backgroundColor={'white'}
+          color="#222222"
+        />
+      </View>
       {/* <FetchRestaurants /> */}
     </View>
   );
@@ -175,18 +178,32 @@ const RouletteScreen: React.FC = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: '#FFDB4F',
   },
-  text: {
+  roulette: {
+    flex: 2,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginTop: '-20%',
+  },
+  buttonsBox: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
+    maxWidth: '70%',
+    paddingBottom: 20,
   },
-  buttonsBox: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: 20,
+  header: {
+    flex: 1,
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    alignContent: 'flex-end',
+    justifyContent: 'flex-end',
+    marginTop: '30%',
+    // marginBottom: 0,
   },
 });
 
