@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 
 type Props = {
-  onPress: VoidFunction;
+  onPress?: VoidFunction;
   title: string;
   backgroundColor?: any;
   size?: string;

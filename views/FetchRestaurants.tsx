@@ -105,9 +105,9 @@ const FetchRestaurants: React.FC = () => {
       longitude: Number(item.longitude),
     };
   });
-  datas.splice(4, 1);
-  datas.splice(10, 1);
-  datas.splice(16, 1);
+  staticData.splice(4, 1);
+  staticData.splice(10, 1);
+  staticData.splice(16, 1);
   return (
     <View>
       <Text style={styles.paragraph2}>

@@ -83,7 +83,7 @@ const PreLoginScreen: React.FC = () => {
         // const user = userCredential.user;
         // console.log(user);
         writeDB();
-        navigation.navigate('Home');
+        navigation.navigate('Intro');
       })
       .catch((error) => {
         let emailValid = false;
@@ -298,11 +298,11 @@ const PreLoginScreen: React.FC = () => {
           minWidth={Dimensions.get('window').width - 70}
           onPress={() => setRegistrationModalVisible(true)}
         />
-        {/* <AppButton
+        <AppButton
           title="Go to Home"
           minWidth={Dimensions.get('window').width - 70}
-          onPress={() => navigation.navigate('Home')}
-        /> */}
+          onPress={() => navigation.navigate('Intro')}
+        />
       </View>
     </View>
   );

@@ -1,13 +1,6 @@
-import {
-  NavigationContainer,
-  useNavigation,
-} from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeStackScreen from './views/HomeStackScreen';
+import { NavigationContainer } from '@react-navigation/native';
 import SettingsScreen from './views/SettingsScreen';
-import { Ionicons } from '@expo/vector-icons';
 import RouletteScreen from './views/RouletteScreen';
-import FavoriteScreen from './views/FavoriteScreen';
 import useCachedResources from './hooks/useCachedResources';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './views/HomeScreen';
@@ -16,25 +9,11 @@ import LoginScreen from './views/LoginScreen';
 import RegistrationScreen from './views/RegistrationScreen';
 import DetailsScreen from './views/DetailsScreen';
 import MapScreen from './views/MapScreen';
-import { useEffect } from 'react';
-import { auth } from './firebase';
+import IntroScreen from './views/IntroScreen';
 
 export default function App() {
-  // const RootTab = createBottomTabNavigator();
   const HomeStack = createNativeStackNavigator();
   const isLoadingComplete = useCachedResources();
-  // const navigation: any = useNavigation();
-
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       navigation.navigate('Home');
-  //     } else {
-  //       navigation.navigate('PreLogin');
-  //     }
-  //   });
-  //   return unsubscribe;
-  // }, []);
 
   if (!isLoadingComplete) {
     return null;
@@ -45,13 +24,20 @@ export default function App() {
           <HomeStack.Screen
             name="Home"
             component={HomeScreen}
-            // options={{
-            //   title: 'Awesome app',
-            // }}
+            options={{
+              headerShown: false,
+            }}
           />
           <HomeStack.Screen
             name="PreLogin"
             component={PreLoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <HomeStack.Screen
+            name="Intro"
+            component={IntroScreen}
             options={{
               headerShown: false,
             }}

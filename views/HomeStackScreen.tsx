@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { auth } from '../firebase';
 import DetailsScreen from './DetailsScreen';
 import HomeScreen from './HomeScreen';
+import IntroScreen from './IntroScreen';
 import LoginScreen from './LoginScreen';
 import MapScreen from './MapScreen';
 import PreLoginScreen from './PreLoginScreen';
@@ -19,9 +20,16 @@ const HomeStackScreen: React.FC = () => {
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
-        // options={{
-        //   title: 'Awesome app',
-        // }}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <HomeStack.Screen
+        name="Intro"
+        component={IntroScreen}
+        options={{
+          headerShown: false,
+        }}
       />
       <HomeStack.Screen
         name="PreLogin"
