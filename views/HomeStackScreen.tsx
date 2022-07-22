@@ -1,3 +1,4 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect } from 'react';
@@ -13,11 +14,11 @@ import RouletteScreen from './RouletteScreen';
 import SettingsScreen from './SettingsScreen';
 
 const HomeStackScreen: React.FC = () => {
-  const HomeStack = createNativeStackNavigator();
+  const HomeStack = createBottomTabNavigator();
 
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="Home"
         component={HomeScreen}
         options={{
@@ -37,7 +38,7 @@ const HomeStackScreen: React.FC = () => {
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
       <HomeStack.Screen
         name="Roulette"
         component={RouletteScreen}
@@ -46,7 +47,7 @@ const HomeStackScreen: React.FC = () => {
         }}
       />
 
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="Login"
         component={LoginScreen}
         options={{
@@ -61,11 +62,11 @@ const HomeStackScreen: React.FC = () => {
           title: '新規会員登録',
           headerShown: false,
         }}
-      />
+      /> */}
 
       <HomeStack.Screen name="Details" component={DetailsScreen} />
       <HomeStack.Screen name="Settings" component={SettingsScreen} />
-      <HomeStack.Screen name="Map" component={MapScreen} />
+      {/* <HomeStack.Screen name="Map" component={MapScreen} /> */}
     </HomeStack.Navigator>
   );
 };

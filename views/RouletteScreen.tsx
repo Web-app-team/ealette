@@ -147,11 +147,11 @@ const RouletteScreen: React.FC = () => {
 
   return (
     <View style={styles.screen}>
-      <AppButton
+      {/* <AppButton
         title="Go to Home"
         onPress={() => navigation.navigate('Home')}
-      />
-      <Text style={styles.header}>ルーレット</Text>
+      /> */}
+      {/* <Text style={styles.header}>ルーレット</Text> */}
       {/* <SlotMachine duration={1000} /> */}
       <View style={styles.roulette}>
         <SlotMachine
@@ -165,8 +165,8 @@ const RouletteScreen: React.FC = () => {
           title="START"
           onPress={randomType}
           borderRadius={100}
-          width={150}
-          height={150}
+          width={100}
+          height={100}
           backgroundColor={'white'}
           color="#222222"
         />
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
-    marginTop: '-20%',
+    // marginTop: '-10%',
   },
   buttonsBox: {
     flex: 1,
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignContent: 'flex-end',
     justifyContent: 'flex-end',
-    marginTop: '30%',
+    marginTop: '20%',
     // marginBottom: 0,
   },
 });

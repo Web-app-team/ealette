@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     top: -2,
     fontWeight: 'bold',
     // color: '#b5b7ba',
-    color: 'black',
+    color: 'white',
   },
   innerBorder: {
     // position: 'absolute',

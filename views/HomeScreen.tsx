@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { auth } from '../firebase';
-import { StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import AppButton from '../components/AppButton';
 import FetchRestaurants from './FetchRestaurants';
 import { useEffect } from 'react';
@@ -20,6 +20,15 @@ const HomeScreen: React.FC = () => {
     return unsubscribe;
   }, []);
 
+  // // Hide Bottom Tab Bar
+  // useEffect(() => {
+  //   navigation
+  //     .getParent()
+  //     ?.setOptions({ tabBarStyle: { display: 'none' } });
+  //   return () =>
+  //     navigation.getParent()?.setOptions({ tabBarStyle: undefined });
+  // }, [navigation]);
+
   const handleSignOut = () => {
     auth
       .signOut()
@@ -34,10 +43,10 @@ const HomeScreen: React.FC = () => {
       <View style={styles.text}>
         {/* <Text style={styles.paragraph}>{latitude}</Text>
         <Text style={styles.paragraph}>{longitude}</Text> */}
-        <Text>登録ありがとうございます！</Text>
+        <Text>早速ルーレットを回して</Text>
         <Text style={styles.welcome}>
           {/* Welcome! {auth.currentUser?.email} */}
-          早速ルーレットを回して 本日のランチを決めましょう！
+          本日のランチを決めましょう！
         </Text>
       </View>
       {/* <FetchRestaurants /> */}
@@ -45,26 +54,27 @@ const HomeScreen: React.FC = () => {
       <View style={styles.buttonsBox}>
         <AppButton
           title="ルーレットを回す"
-          onPress={() => navigation.navigate('Roulette')}
+          minWidth={Dimensions.get('window').width - 70}
+          onPress={() => navigation.navigate('ルーレット')}
         />
         <AppButton
-          title="Details"
-          onPress={() => navigation.navigate('Details')}
+          title="履歴"
+          onPress={() => navigation.navigate('履歴')}
         />
-        <AppButton
+        {/* <AppButton
           title="Settings"
           onPress={() => navigation.navigate('Settings')}
-        />
+        /> */}
 
         <AppButton
           title="Map"
           onPress={() => navigation.navigate('Map')}
         />
         <AppButton title="Logout" onPress={handleSignOut} />
-        <AppButton
+        {/* <AppButton
           title="Login"
           onPress={() => navigation.navigate('Login')}
-        />
+        /> */}
       </View>
     </View>
   );
@@ -73,6 +83,7 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   text: {
     flex: 1,
@@ -91,7 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 40,
   },
   paragraph: {
     fontSize: 18,

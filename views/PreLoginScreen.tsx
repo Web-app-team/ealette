@@ -196,7 +196,11 @@ const PreLoginScreen: React.FC = () => {
                   ) : null}
                 </View>
                 <View style={styles.modalText}>
-                  <AppButton title="ログイン" onPress={handleLogin} />
+                  <AppButton
+                    title="ログイン"
+                    minWidth={Dimensions.get('window').width - 70}
+                    onPress={handleLogin}
+                  />
                 </View>
               </KeyboardAvoidingView>
               {/* Login View End */}
@@ -273,6 +277,7 @@ const PreLoginScreen: React.FC = () => {
                 <View style={styles.modalText}>
                   <AppButton
                     title="ユーザー登録"
+                    minWidth={Dimensions.get('window').width - 70}
                     onPress={handleSignUp}
                   />
                 </View>
@@ -337,11 +342,11 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   modalHeader: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 30,
-    marginBottom: 0,
+    marginBottom: 30,
   },
   subHeader: {
     paddingLeft: 65,
