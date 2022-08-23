@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -8,8 +9,14 @@ import {
 } from 'react-native';
 import AppIntroSlider from '../components/IntroSlider/index';
 
-const IntroScreen: React.FC = () => {
+interface IRecipeProps {
+  route?: any;
+}
+
+const IntroScreen: React.FC<IRecipeProps> = ({ route }) => {
   const navigation: any = useNavigation();
+  const restaurants = route.params.getPosAndRest;
+  console.log(restaurants);
 
   const slides = [
     {
@@ -49,7 +56,9 @@ const IntroScreen: React.FC = () => {
     <AppIntroSlider
       data={slides}
       renderItem={renderItem}
-      onDone={() => navigation.navigate('Home')}
+      onDone={() =>
+        navigation.navigate('Home', { propsRestaurants: restaurants })
+      }
       bottomButton={true}
     />
   );

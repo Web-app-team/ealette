@@ -43,7 +43,7 @@ const LoginScreen: React.FC = () => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
-        navigation.navigate('Home');
+        navigation.navigate('IntroScreen');
       })
       .catch((error) => {
         let passwordValid = false;
@@ -60,7 +60,7 @@ const LoginScreen: React.FC = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate('Home');
+        navigation.navigate('IntroScreen');
       } else {
         navigation.navigate('Login');
       }

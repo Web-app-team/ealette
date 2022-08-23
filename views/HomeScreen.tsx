@@ -2,11 +2,16 @@ import { useNavigation } from '@react-navigation/native';
 import { auth } from '../firebase';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import AppButton from '../components/AppButton';
-import FetchRestaurants from './FetchRestaurants';
 import { useEffect } from 'react';
 
-const HomeScreen: React.FC = () => {
+interface IRecipeProps {
+  route?: any;
+}
+
+const HomeScreen: React.FC<IRecipeProps> = ({ route }) => {
   const navigation: any = useNavigation();
+  const restaurants = route.params;
+  console.log(restaurants);
 
   // Subscription Check
   useEffect(() => {
@@ -55,7 +60,9 @@ const HomeScreen: React.FC = () => {
         <AppButton
           title="ルーレットを回す"
           minWidth={Dimensions.get('window').width - 70}
-          onPress={() => navigation.navigate('ルーレット')}
+          onPress={() =>
+            navigation.navigate('ルーレット', { restaurants })
+          }
         />
         <AppButton
           title="履歴"

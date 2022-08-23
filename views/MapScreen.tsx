@@ -16,7 +16,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import * as Location from 'expo-location';
 import axios from 'axios';
 
-const MapScreen: React.FC = () => {
+interface IRecipeProps {
+  route?: any;
+}
+
+const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
+  console.log(route.params.filteredCompare);
   const [userLocation, setUserLocation] = useState<
     object | undefined
   >();
@@ -27,37 +32,7 @@ const MapScreen: React.FC = () => {
   const [longitude, setLongitude] = useState<number | undefined>(
     139.6533851
   );
-  const [datas, setDatas] = useState([] as any[]);
-  const [show, setShow] = useState(false);
   const animation = useRef(new Animated.Value(0)).current;
-
-  const getRestaurants = useCallback(async () => {
-    const options = {
-      method: 'GET',
-      url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng',
-      params: {
-        latitude: latitude,
-        longitude: longitude,
-        limit: '30',
-        currency: 'YEN',
-        distance: '1',
-        open_now: 'true',
-        lunit: 'km',
-        lang: 'ja_JP',
-      },
-      headers: {
-        'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
-        'X-RapidAPI-Key':
-          '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
-      },
-    };
-
-    const response = await axios.request(options);
-    if (response) {
-      setDatas(response.data.data);
-      console.log(response.data.data);
-    }
-  }, [latitude, longitude]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -69,29 +44,17 @@ const MapScreen: React.FC = () => {
         setErrorMsg('Permission to access location was denied');
         return;
       }
-
       let userLocation = await Location.getCurrentPositionAsync({});
       setLatitude(userLocation.coords.latitude);
       setLongitude(userLocation.coords.longitude);
       setUserLocation(userLocation.coords);
     };
-
     getLocationAsync();
 
     return () => {
       source.cancel();
     };
   }, []);
-
-  useEffect(() => {
-    let isApiSubscribed = true;
-    if (isApiSubscribed) {
-      getRestaurants().catch(console.error);
-    }
-    return () => {
-      isApiSubscribed = false;
-    };
-  }, [getRestaurants]);
 
   let text = 'Waiting..';
   if (errorMsg) {
@@ -106,36 +69,21 @@ const MapScreen: React.FC = () => {
     longitudeDelta: 0.009,
   };
 
-  // const d = datas.map((data: any, index: number) => {
-  //   return data.cuisine;
-  // });
-  // const result = [
-  //   ...datas
-  //     .reduce((r, { cuisine }) => {
-  //       (cuisine || []).forEach((o: any) => {
-  //         r.has(o.name) || r.set(o.name, { ...o });
-  //         r.get(o.name);
-  //       });
-
-  //       return r;
-  //     }, new Map())
-  //     .values(),
-  // ];
-
-  // const itemList = result.map(({ name }) => name);
-
-  const staticData = datas.map((item) => {
-    // console.log(item.photo);
+  const staticData = route.params.filteredCompare.map((item: any) => {
     return {
+      name: String(item.name),
       latitude: Number(item.latitude),
       longitude: Number(item.longitude),
       // image: item.photo.images.small.url,
     };
   });
-  staticData.splice(4, 1);
-  staticData.splice(10, 1);
-  staticData.splice(16, 1);
+  console.log(staticData);
 
+  console.log(
+    staticData.map((resName) => {
+      return resName.name;
+    })
+  );
   const StyledMarker = () => {
     return (
       <View
@@ -170,10 +118,10 @@ const MapScreen: React.FC = () => {
         rotateEnabled={true}
         region={location}
       >
-        {staticData.map((item, index) => (
+        {staticData.map((item: any, index: any) => (
           <Marker
             key={index}
-            title="Test"
+            title={item.name}
             coordinate={{
               latitude: item.latitude,
               longitude: item.longitude,

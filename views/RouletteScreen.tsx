@@ -2,161 +2,91 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, View } from 'react-native';
 import AppButton from '../components/AppButton';
 import { useCallback, useEffect, useState } from 'react';
-import FetchRestaurants from './FetchRestaurants';
-import * as Location from 'expo-location';
-import axios from 'axios';
 import SlotMachine from '../components/SlotMachine';
 
-const RouletteScreen: React.FC = () => {
-  const [userLocation, setUserLocation] = useState<
-    object | undefined
-  >();
-  const [latitude, setLatitude] = useState<number | undefined>(
-    35.8368658
-  );
-  const [longitude, setLongitude] = useState<number | undefined>(
-    139.6533851
-  );
-  const [datas, setDatas] = useState([] as any[]);
+interface IRecipeProps {
+  route?: any;
+}
+
+const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   const navigation: any = useNavigation();
-
-  const getLocationAsync = async () => {
-    let { status } =
-      await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      return;
-    }
-    let userLocation = await Location.getCurrentPositionAsync({});
-    setLatitude(userLocation.coords.latitude);
-    setLongitude(userLocation.coords.longitude);
-    setUserLocation(userLocation.coords);
-  };
-
-  const getRestaurants = useCallback(async () => {
-    const options = {
-      method: 'GET',
-      url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng',
-      params: {
-        latitude: latitude,
-        longitude: longitude,
-        limit: '30',
-        currency: 'YEN',
-        distance: '1',
-        open_now: 'true',
-        lunit: 'km',
-        lang: 'ja_JP',
-      },
-      headers: {
-        'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
-        'X-RapidAPI-Key':
-          '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
-      },
-    };
-
-    const response = await axios.request(options);
-    if (response) {
-      setDatas(response.data.data);
-    }
-  }, [latitude, longitude]);
-
-  useEffect(() => {
-    getLocationAsync();
-  }, []);
-
-  useEffect(() => {
-    getRestaurants().catch(console.error);
-  }, [getRestaurants]);
-
-  const result = [
-    ...datas
-      .reduce((r, { cuisine }) => {
-        (cuisine || []).forEach((o: any) => {
-          r.has(o.name) || r.set(o.name, { ...o });
-          r.get(o.name);
-        });
-
-        return r;
-      }, new Map())
-      .values(),
-  ];
-
-  // const restaurantsTypes = result.map(({ type }) => type);
-  // console.log(itemList);
-
-  const restaurantsTypes = [
-    {
-      type: '中華',
-    },
-    {
-      type: 'カフェ・喫茶店',
-    },
-    {
-      type: '和食',
-    },
-    {
-      type: 'イタリアン',
-    },
-    {
-      type: 'アジア料理',
-    },
-    {
-      type: '韓国料理',
-    },
-    {
-      type: 'ヘルシー料理',
-    },
-    {
-      type: 'ファストフード',
-    },
-    {
-      type: '肉料理',
-    },
-    {
-      type: '海鮮料理',
-    },
-    {
-      type: 'スープ',
-    },
-    {
-      type: 'グリル料理',
-    },
-    {
-      type: 'ステーキ',
-    },
-    {
-      type: 'メキシコ料理',
-    },
-    {
-      type: 'イギリス料理',
-    },
-    {
-      type: '寿司',
-    },
-    {
-      type: 'フレンチ',
-    },
-  ];
-
   const [activeType, setActiveType] = useState<number>(0);
+
+  console.log(route.params.restaurants.propsRestaurants);
+
+  const restaurantData = route.params.restaurants.propsRestaurants
+    ? route.params.restaurants.propsRestaurants.map(
+        (restaurant: any) => {
+          if (
+            restaurant.cuisine !== undefined &&
+            restaurant.cuisine.length !== 0
+          ) {
+            return restaurant.cuisine;
+          }
+          return null;
+        }
+      )
+    : null;
+  const filtered = restaurantData.filter((el: any) => {
+    return el != null;
+  });
+
+  const restaurantsTypesAll = filtered.map((type: any) => {
+    return { type: type[0].name };
+  });
+
+  const restaurantsTypes = restaurantsTypesAll.filter(
+    (value: any, index: any) => {
+      const _value = JSON.stringify(value);
+      return (
+        index ===
+        restaurantsTypesAll.findIndex((obj: any) => {
+          return JSON.stringify(obj) === _value;
+        })
+      );
+    }
+  );
+
+  const compare = route.params.restaurants.propsRestaurants.map(
+    (restaurant: any) => {
+      if (
+        restaurant.cuisine !== undefined &&
+        restaurant.cuisine.length !== 0
+      ) {
+        if (
+          restaurant.cuisine[0].name ===
+          restaurantsTypes[activeType].type
+        ) {
+          return restaurant;
+        }
+      }
+    }
+  );
+
+  const filteredCompare = compare.filter((el: any) => {
+    return el != null;
+  });
+  console.log(filteredCompare);
 
   const randomType = () => {
     const len = restaurantsTypes.length;
     setActiveType(Math.floor(Math.random() * len));
-    console.log(restaurantsTypes[activeType].type);
   };
-
+  console.log(restaurantsTypes[activeType]);
   return (
     <View style={styles.screen}>
-      {/* <AppButton
-        title="Go to Home"
-        onPress={() => navigation.navigate('Home')}
-      /> */}
+      <AppButton
+        title="地図に見る"
+        onPress={() =>
+          navigation.navigate('Map', { filteredCompare })
+        }
+      />
       {/* <Text style={styles.header}>ルーレット</Text> */}
       {/* <SlotMachine duration={1000} /> */}
       <View style={styles.roulette}>
         <SlotMachine
           text={restaurantsTypes[activeType].type}
-          range="中華料理カフェ・喫茶店和食イタリアンアジア韓国ヘルシーファストフード肉海鮮スープグリルステーキメキシコイギリス寿司フレンチ"
+          range="バーベキュー中華料理カフェ・喫茶店和食イタリアンアジア韓国ヘルシーファストフード肉海鮮スープグリルステーキメキシコイギリス寿司フレンチ地中海パブ"
         />
       </View>
       {/* <Text>{restaurantsTypes[activeType].type}</Text> */}
@@ -171,7 +101,6 @@ const RouletteScreen: React.FC = () => {
           color="#222222"
         />
       </View>
-      {/* <FetchRestaurants /> */}
     </View>
   );
 };

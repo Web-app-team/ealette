@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { addDoc, collection } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
   Dimensions,
@@ -16,11 +16,14 @@ import {
   TextInput,
   View,
   Image,
+  Platform,
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import AppButton from '../components/AppButton';
 import { auth, db } from '../firebase';
 import { MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import axios from 'axios';
+import * as Location from 'expo-location';
 
 const PreLoginScreen: React.FC = () => {
   const navigation: any = useNavigation();
@@ -31,6 +34,75 @@ const PreLoginScreen: React.FC = () => {
   const [passwordError, setPasswordError] = useState('');
   const [password, onChangePassword] = useState('');
   const [loginModalVisible, setLoginModalVisible] = useState(false);
+
+  const [userLocation, setUserLocation] = useState<
+    object | undefined
+  >();
+  const [errorMsg, setErrorMsg] = useState<string | undefined>();
+  const [latitude, setLatitude] = useState<number | undefined>(
+    35.8368658
+  );
+  const [longitude, setLongitude] = useState<number | undefined>(
+    139.6533851
+  );
+  const [datas, setDatas] = useState([] as any[]);
+  const getRestaurants = useCallback(async () => {
+    const options = {
+      method: 'GET',
+      url: 'https://travel-advisor.p.rapidapi.com/restaurants/list-by-latlng',
+      params: {
+        latitude: latitude,
+        longitude: longitude,
+        limit: '30',
+        currency: 'YEN',
+        distance: '1',
+        open_now: 'true',
+        lunit: 'km',
+        lang: 'ja_JP',
+      },
+      headers: {
+        'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
+        'X-RapidAPI-Key':
+          '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
+      },
+    };
+    const response = await axios.request(options);
+
+    if (response) {
+      setDatas(response.data.data);
+      console.log(response.data.data);
+    }
+  }, [latitude, longitude]);
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+    const getLocationAsync = async () => {
+      let { status } =
+        await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      let userLocation = await Location.getCurrentPositionAsync({});
+      setLatitude(userLocation.coords.latitude);
+      setLongitude(userLocation.coords.longitude);
+      setUserLocation(userLocation.coords);
+    };
+    getLocationAsync();
+    return () => {
+      source.cancel();
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   let isApiSubscribed = true;
+  //   if (isApiSubscribed) {
+  //     getRestaurants().catch(console.error);
+  //   }
+  //   return () => {
+  //     isApiSubscribed = false;
+  //   };
+  // }, [getRestaurants]);
 
   // Registration Screen States
   // const [email, onChangeEmail] = useState('');
@@ -48,7 +120,7 @@ const PreLoginScreen: React.FC = () => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
-        navigation.navigate('Home');
+        navigation.navigate('Intro', { getPosAndRest: datas });
       })
       .catch((error) => {
         let passwordValid = false;
@@ -151,6 +223,7 @@ const PreLoginScreen: React.FC = () => {
       </View>
 
       {/* Login Modal Start */}
+
       <GestureRecognizer
         style={{ flex: 1 }}
         config={config}
@@ -168,7 +241,11 @@ const PreLoginScreen: React.FC = () => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               {/* Login View Start */}
-              <KeyboardAvoidingView behavior="padding">
+              <KeyboardAvoidingView
+                behavior={
+                  Platform.OS === 'ios' ? 'padding' : 'height'
+                }
+              >
                 <View style={styles.modalText}>
                   <Text style={styles.modalHeader}>ログイン</Text>
                   <Text>メールアドレス</Text>
@@ -227,7 +304,12 @@ const PreLoginScreen: React.FC = () => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               {/* Registration View Start */}
-              <KeyboardAvoidingView behavior="padding">
+              <KeyboardAvoidingView
+                behavior={
+                  Platform.OS === 'ios' ? 'padding' : 'height'
+                }
+                style={styles.screen2}
+              >
                 <View style={styles.modalText}>
                   <Text style={styles.modalHeader}>ユーザー登録</Text>
                   <Text>ニックネーム</Text>
@@ -306,7 +388,9 @@ const PreLoginScreen: React.FC = () => {
         <AppButton
           title="Go to Home"
           minWidth={Dimensions.get('window').width - 70}
-          onPress={() => navigation.navigate('Intro')}
+          onPress={() =>
+            navigation.navigate('Intro', { getPosAndRest: datas })
+          }
         />
       </View>
     </View>
@@ -317,6 +401,9 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: '#FFDB4F',
+  },
+  screen2: {
+    flex: 1,
   },
   cardImage: {
     resizeMode: 'contain',
