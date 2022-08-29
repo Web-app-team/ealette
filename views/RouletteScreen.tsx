@@ -75,21 +75,13 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   console.log(restaurantsTypes[activeType]);
   return (
     <View style={styles.screen}>
-      <AppButton
-        title="地図に見る"
-        onPress={() =>
-          navigation.navigate('Map', { filteredCompare })
-        }
-      />
-      {/* <Text style={styles.header}>ルーレット</Text> */}
-      {/* <SlotMachine duration={1000} /> */}
+      <Text style={styles.welcome}>本日のランチは…</Text>
       <View style={styles.roulette}>
         <SlotMachine
           text={restaurantsTypes[activeType].type}
           range="バーベキュー中華料理カフェ・喫茶店和食イタリアンアジア韓国ヘルシーファストフード肉海鮮スープグリルステーキメキシコイギリス寿司フレンチ地中海パブ"
         />
       </View>
-      {/* <Text>{restaurantsTypes[activeType].type}</Text> */}
       <View style={styles.buttonsBox}>
         <AppButton
           title="START"
@@ -101,6 +93,14 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
           color="#222222"
         />
       </View>
+      <View style={styles.buttonsBox2}>
+        <AppButton
+          title="地図に見る"
+          onPress={() =>
+            navigation.navigate('Map', { filteredCompare })
+          }
+        />
+      </View>
     </View>
   );
 };
@@ -108,13 +108,18 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: '#FFDB4F',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   roulette: {
     flex: 2,
     justifyContent: 'center',
     alignSelf: 'center',
     alignItems: 'center',
-    // marginTop: '-10%',
+  },
+  welcome: {
+    fontSize: 18,
+    marginTop: 50,
   },
   buttonsBox: {
     flex: 1,
@@ -124,6 +129,11 @@ const styles = StyleSheet.create({
     maxWidth: '70%',
     paddingBottom: 20,
   },
+  buttonsBox2: {
+    position: 'absolute',
+    bottom: 70,
+    right: 0,
+  },
   header: {
     flex: 1,
     fontSize: 25,
@@ -132,7 +142,6 @@ const styles = StyleSheet.create({
     alignContent: 'flex-end',
     justifyContent: 'flex-end',
     marginTop: '20%',
-    // marginBottom: 0,
   },
 });
 

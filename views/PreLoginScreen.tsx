@@ -46,6 +46,7 @@ const PreLoginScreen: React.FC = () => {
     139.6533851
   );
   const [datas, setDatas] = useState([] as any[]);
+
   const getRestaurants = useCallback(async () => {
     const options = {
       method: 'GET',
@@ -63,7 +64,7 @@ const PreLoginScreen: React.FC = () => {
       headers: {
         'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
         'X-RapidAPI-Key':
-          '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
+          'c0fa11d7admshc3c2301bdfb27e3p12a19djsn1e5326b5ae48',
       },
     };
     const response = await axios.request(options);
@@ -94,15 +95,15 @@ const PreLoginScreen: React.FC = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   let isApiSubscribed = true;
-  //   if (isApiSubscribed) {
-  //     getRestaurants().catch(console.error);
-  //   }
-  //   return () => {
-  //     isApiSubscribed = false;
-  //   };
-  // }, [getRestaurants]);
+  useEffect(() => {
+    let isApiSubscribed = true;
+    if (isApiSubscribed) {
+      getRestaurants().catch(console.error);
+    }
+    return () => {
+      isApiSubscribed = false;
+    };
+  }, [getRestaurants]);
 
   // Registration Screen States
   // const [email, onChangeEmail] = useState('');
@@ -155,7 +156,7 @@ const PreLoginScreen: React.FC = () => {
         // const user = userCredential.user;
         // console.log(user);
         writeDB();
-        navigation.navigate('Intro');
+        navigation.navigate('Intro', { getPosAndRest: datas });
       })
       .catch((error) => {
         let emailValid = false;
@@ -223,32 +224,32 @@ const PreLoginScreen: React.FC = () => {
       </View>
 
       {/* Login Modal Start */}
-
-      <GestureRecognizer
-        style={{ flex: 1 }}
-        config={config}
-        onSwipeDown={() => setLoginModalVisible(false)}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.screen2}
       >
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={loginModalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setLoginModalVisible(!loginModalVisible);
-          }}
+        <GestureRecognizer
+          style={{ flex: 1 }}
+          config={config}
+          onSwipeDown={() => setLoginModalVisible(false)}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              {/* Login View Start */}
-              <KeyboardAvoidingView
-                behavior={
-                  Platform.OS === 'ios' ? 'padding' : 'height'
-                }
-              >
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={loginModalVisible}
+            onRequestClose={() => {
+              setLoginModalVisible(!loginModalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                {/* Login View Start */}
+
                 <View style={styles.modalText}>
                   <Text style={styles.modalHeader}>ログイン</Text>
-                  <Text>メールアドレス</Text>
+                  <Text style={styles.modalSubHeader}>
+                    メールアドレス
+                  </Text>
                   <TextInput
                     value={email}
                     onChangeText={(newEmail) =>
@@ -259,7 +260,9 @@ const PreLoginScreen: React.FC = () => {
                   {emailError.length > 0 ? (
                     <Text>{emailError}</Text>
                   ) : null}
-                  <Text>パスワード</Text>
+                  <Text style={styles.modalSubHeader}>
+                    パスワード
+                  </Text>
                   <TextInput
                     value={password}
                     onChangeText={(newPassword) =>
@@ -272,19 +275,20 @@ const PreLoginScreen: React.FC = () => {
                     <Text>{passwordError}</Text>
                   ) : null}
                 </View>
-                <View style={styles.modalText}>
+                <View style={styles.modalButton}>
                   <AppButton
                     title="ログイン"
                     minWidth={Dimensions.get('window').width - 70}
                     onPress={handleLogin}
                   />
                 </View>
-              </KeyboardAvoidingView>
-              {/* Login View End */}
+
+                {/* Login View End */}
+              </View>
             </View>
-          </View>
-        </Modal>
-      </GestureRecognizer>
+          </Modal>
+        </GestureRecognizer>
+      </KeyboardAvoidingView>
       {/* Login Modal End */}
 
       {/* Registration Modal Start */}
@@ -297,22 +301,22 @@ const PreLoginScreen: React.FC = () => {
           transparent={true}
           visible={registrationModalVisible}
           onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
             setRegistrationModalVisible(!registrationModalVisible);
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              {/* Registration View Start */}
-              <KeyboardAvoidingView
-                behavior={
-                  Platform.OS === 'ios' ? 'padding' : 'height'
-                }
-                style={styles.screen2}
-              >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                {/* Registration View Start */}
+
                 <View style={styles.modalText}>
                   <Text style={styles.modalHeader}>ユーザー登録</Text>
-                  <Text>ニックネーム</Text>
+                  <Text style={styles.modalSubHeader}>
+                    ニックネーム
+                  </Text>
                   <TextInput
                     value={nickname}
                     onChangeText={(newNickname) =>
@@ -320,7 +324,9 @@ const PreLoginScreen: React.FC = () => {
                     }
                     style={styles.textInput}
                   ></TextInput>
-                  <Text>メールアドレス</Text>
+                  <Text style={styles.modalSubHeader}>
+                    メールアドレス
+                  </Text>
                   <TextInput
                     value={email}
                     onChangeText={(newEmail) =>
@@ -331,7 +337,9 @@ const PreLoginScreen: React.FC = () => {
                   {emailError.length > 0 ? (
                     <Text>{emailError}</Text>
                   ) : null}
-                  <Text>パスワード</Text>
+                  <Text style={styles.modalSubHeader}>
+                    パスワード
+                  </Text>
                   <TextInput
                     value={password}
                     onChangeText={(newPassword) =>
@@ -343,32 +351,25 @@ const PreLoginScreen: React.FC = () => {
                   {passwordError.length > 0 ? (
                     <Text>{passwordError}</Text>
                   ) : null}
-                  <Text>パスワード確認</Text>
-                  <TextInput
-                    //   value={password}
-                    //   onChangeText={(newPassword) =>
-                    //     onChangePassword(newPassword)
-                    //   }
-                    //   secureTextEntry
-                    style={styles.textInput}
-                  ></TextInput>
+
                   {passwordError.length > 0 ? (
                     <Text>{passwordError}</Text>
                   ) : null}
                 </View>
-                <View style={styles.modalText}>
+                <View style={styles.modalButton}>
                   <AppButton
                     title="ユーザー登録"
                     minWidth={Dimensions.get('window').width - 70}
                     onPress={handleSignUp}
                   />
                 </View>
-              </KeyboardAvoidingView>
-              {/* Registration View End */}
+                {/* Registration View End */}
+              </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </Modal>
       </GestureRecognizer>
+
       {/* Registration Modal End */}
 
       <View style={styles.buttonsBox}>
@@ -385,13 +386,13 @@ const PreLoginScreen: React.FC = () => {
           minWidth={Dimensions.get('window').width - 70}
           onPress={() => setRegistrationModalVisible(true)}
         />
-        <AppButton
+        {/* <AppButton
           title="Go to Home"
           minWidth={Dimensions.get('window').width - 70}
           onPress={() =>
             navigation.navigate('Intro', { getPosAndRest: datas })
           }
-        />
+        /> */}
       </View>
     </View>
   );
@@ -433,12 +434,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 30,
+    marginLeft: 10,
     marginBottom: 30,
+  },
+  modalSubHeader: {
+    textAlign: 'left',
+    marginLeft: 6,
   },
   subHeader: {
     paddingLeft: 65,
     paddingRight: 65,
-    marginTop: 23,
     fontSize: 16,
     textAlign: 'center',
   },
@@ -460,14 +465,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  modalButton: {
+    alignSelf: 'center',
+  },
   centeredView: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    marginBottom: -25,
+    marginBottom: -20,
   },
   modalView: {
-    margin: 20,
+    flex: 1,
     backgroundColor: 'white',
     borderRadius: 25,
     padding: 15,
@@ -504,8 +512,8 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    margin: 12,
-    padding: 10,
+    margin: 8,
+    padding: 8,
     backgroundColor: '#F4F4F4',
     paddingHorizontal: 15,
     paddingVertical: 10,

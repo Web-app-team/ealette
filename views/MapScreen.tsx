@@ -1,36 +1,35 @@
 import MapView, {
+  Callout,
   Marker,
-  MarkerAnimated,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
 import {
   Animated,
-  ScrollView,
   StyleSheet,
   Text,
   View,
   Dimensions,
   Image,
 } from 'react-native';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import { createOpenLink } from 'react-native-open-maps';
 
 interface IRecipeProps {
   route?: any;
 }
 
 const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
-  console.log(route.params.filteredCompare);
   const [userLocation, setUserLocation] = useState<
     object | undefined
   >();
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const [latitude, setLatitude] = useState<number | undefined>(
-    35.8368658
+    35.6988629426
   );
   const [longitude, setLongitude] = useState<number | undefined>(
-    139.6533851
+    139.696601629
   );
   const animation = useRef(new Animated.Value(0)).current;
 
@@ -72,35 +71,14 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
   const staticData = route.params.filteredCompare.map((item: any) => {
     return {
       name: String(item.name),
+      image: item.photo ? item.photo.images.medium.url : null,
       latitude: Number(item.latitude),
       longitude: Number(item.longitude),
-      // image: item.photo.images.small.url,
+      address: String(item.address),
     };
   });
-  console.log(staticData);
 
-  console.log(
-    staticData.map((resName) => {
-      return resName.name;
-    })
-  );
-  const StyledMarker = () => {
-    return (
-      <View
-        style={{
-          width: 30,
-          height: 30,
-          borderRadius: 20,
-          backgroundColor: '#ffc600',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: 'black' }}>お店</Text>
-      </View>
-    );
-  };
+  console.log(userLocation);
 
   return (
     <View style={styles.container}>
@@ -126,51 +104,49 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
               latitude: item.latitude,
               longitude: item.longitude,
             }}
+            onCalloutPress={createOpenLink({
+              end: item.address,
+              zoom: 20,
+            })}
           >
-            <StyledMarker />
+            <Callout tooltip style={styles.card}>
+              <View style={styles.cardInfo}>
+                <Text>
+                  {item.name}
+                  {'\n'}
+                </Text>
+                <Text style={styles.cardImageContainer}>
+                  {item.image !== null ? (
+                    <Image
+                      source={{
+                        uri: item.image,
+                      }}
+                      style={styles.cardImage}
+                    />
+                  ) : (
+                    <Image
+                      source={require('../assets/dummy.jpg')}
+                      resizeMode="contain"
+                      style={styles.cardImageDummy}
+                    />
+                  )}
+                </Text>
+                <Text>
+                  {'\n'}住所：{'\n'}
+                  {item.address}
+                  {'\n'}
+                </Text>
+              </View>
+              {/* <View>
+                <AppButton title="Go to rest" />
+              </View> */}
+            </Callout>
+
+            {/* <StyledMarker /> */}
             {/* {item.image} */}
           </Marker>
         ))}
       </MapView>
-      {/* <Animated.ScrollView
-        horizontal={true}
-        scrollEventThrottle={1}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={100}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: {
-                  x: animation,
-                },
-              },
-            },
-          ],
-          { useNativeDriver: true }
-        )}
-        style={styles.scrollView}
-        contentContainerStyle={styles.endPadding}
-      >
-        {staticData.map((marker, index) => {
-          <View style={styles.card} key={index}>
-            <Image
-              source={marker.image}
-              style={styles.cardImage}
-              resizeMode="cover"
-            />
-            <View style={styles.textContent}>
-              <Text numberOfLines={1} style={styles.cardTitle}>
-                {MarkerAnimated}
-              </Text>
-              <Text numberOfLines={1} style={styles.cardDescription}>
-                {marker}
-              </Text>
-            </View>
-          </View>;
-        })}
-      </Animated.ScrollView> */}
     </View>
   );
 };
@@ -204,7 +180,7 @@ const styles = StyleSheet.create({
     paddingRight: 100,
   },
   card: {
-    padding: 10,
+    padding: 5,
     elevation: 2,
     backgroundColor: '#FFF',
     marginHorizontal: 10,
@@ -212,15 +188,26 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.3,
     // shadowOffset: { x: 2, y: -2 },
-    height: 100,
-    width: 100,
+    height: 300,
+    width: 300,
     overflow: 'hidden',
   },
+  cardInfo: {
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  cardImageContainer: {
+    marginTop: -140,
+  },
   cardImage: {
-    flex: 3,
-    width: '100%',
-    height: '100%',
-    alignSelf: 'center',
+    height: 300,
+    width: 300,
+  },
+  cardImageDummy: {
+    height: 300,
+    width: 300,
   },
   textContent: {
     flex: 1,

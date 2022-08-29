@@ -304,16 +304,14 @@ const styles = react_native_1.StyleSheet.create({
   },
   paginationContainer: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 40,
     left: 16,
     right: 16,
     justifyContent: 'center',
   },
   paginationDots: {
     height: 16,
-    margin: 16,
-    // marginLeft: 10,
-    // marginRight: 10,
+    margin: 32,
     flexDirection: isAndroidRTL ? 'row-reverse' : 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -322,7 +320,7 @@ const styles = react_native_1.StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    marginHorizontal: 4,
+    marginHorizontal: 16,
   },
   leftButtonContainer: {
     position: 'absolute',

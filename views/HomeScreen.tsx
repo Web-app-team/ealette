@@ -46,11 +46,8 @@ const HomeScreen: React.FC<IRecipeProps> = ({ route }) => {
   return (
     <View style={styles.screen}>
       <View style={styles.text}>
-        {/* <Text style={styles.paragraph}>{latitude}</Text>
-        <Text style={styles.paragraph}>{longitude}</Text> */}
         <Text>早速ルーレットを回して</Text>
         <Text style={styles.welcome}>
-          {/* Welcome! {auth.currentUser?.email} */}
           本日のランチを決めましょう！
         </Text>
       </View>
@@ -64,20 +61,24 @@ const HomeScreen: React.FC<IRecipeProps> = ({ route }) => {
             navigation.navigate('ルーレット', { restaurants })
           }
         />
-        <AppButton
+        {/* <AppButton
           title="履歴"
           onPress={() => navigation.navigate('履歴')}
-        />
+        /> */}
         {/* <AppButton
           title="Settings"
           onPress={() => navigation.navigate('Settings')}
         /> */}
 
-        <AppButton
+        {/* <AppButton
           title="Map"
           onPress={() => navigation.navigate('Map')}
+        /> */}
+        <AppButton
+          title="ログアウト"
+          minWidth={Dimensions.get('window').width - 70}
+          onPress={handleSignOut}
         />
-        <AppButton title="Logout" onPress={handleSignOut} />
         {/* <AppButton
           title="Login"
           onPress={() => navigation.navigate('Login')}
