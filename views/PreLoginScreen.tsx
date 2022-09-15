@@ -54,7 +54,7 @@ const PreLoginScreen: React.FC = () => {
       params: {
         latitude: latitude,
         longitude: longitude,
-        limit: '30',
+        limit: '50',
         currency: 'YEN',
         distance: '1',
         open_now: 'true',
@@ -100,6 +100,7 @@ const PreLoginScreen: React.FC = () => {
     if (isApiSubscribed) {
       getRestaurants().catch(console.error);
     }
+
     return () => {
       isApiSubscribed = false;
     };
@@ -148,6 +149,32 @@ const PreLoginScreen: React.FC = () => {
       console.error('Error adding document: ', e);
     }
   };
+
+  // // Restaurant Screen Push to Firebase
+  // const writeDB2 = async (): Promise<any> => {
+  //   const restaurantData = datas.map((data) => {
+  //     return {
+  //       name: data.name !== undefined ? data.name : null,
+  //       cuisine:
+  //         data.cuisine !== undefined && data.cuisine.length !== 0
+  //           ? data.cuisine[0].name
+  //           : null,
+  //       image: data.photo ? data.photo.images.medium.url : null,
+  //       address: data.address !== undefined ? data.address : null,
+  //       latitude: data.latitude !== undefined ? data.latitude : null,
+  //       longitude:
+  //         data.longitude !== undefined ? data.longitude : null,
+  //     };
+  //   });
+  //   try {
+  //     const docRef = await addDoc(collection(db, 'restaurants'), {
+  //       restaurantData: restaurantData,
+  //     });
+  //     console.log('Document written with ID: ', docRef.id);
+  //   } catch (e) {
+  //     console.error('Error adding document: ', e);
+  //   }
+  // };
 
   // Registration Screen Functions
   const handleSignUp = () => {
@@ -373,7 +400,7 @@ const PreLoginScreen: React.FC = () => {
       {/* Registration Modal End */}
 
       <View style={styles.buttonsBox}>
-        <AppButton
+        {/* <AppButton
           title="ログイン"
           minWidth={Dimensions.get('window').width - 70}
           onPress={() => setLoginModalVisible(true)}
@@ -385,14 +412,14 @@ const PreLoginScreen: React.FC = () => {
           color="#222222"
           minWidth={Dimensions.get('window').width - 70}
           onPress={() => setRegistrationModalVisible(true)}
-        />
-        {/* <AppButton
-          title="Go to Home"
+        /> */}
+        <AppButton
+          title="始める"
           minWidth={Dimensions.get('window').width - 70}
           onPress={() =>
             navigation.navigate('Intro', { getPosAndRest: datas })
           }
-        /> */}
+        />
       </View>
     </View>
   );

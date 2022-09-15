@@ -14,16 +14,16 @@ const HomeScreen: React.FC<IRecipeProps> = ({ route }) => {
   console.log(restaurants);
 
   // Subscription Check
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.navigate('Home');
-      } else {
-        navigation.navigate('PreLogin');
-      }
-    });
-    return unsubscribe;
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       navigation.navigate('Home');
+  //     } else {
+  //       navigation.navigate('PreLogin');
+  //     }
+  //   });
+  //   return unsubscribe;
+  // }, []);
 
   // // Hide Bottom Tab Bar
   // useEffect(() => {
@@ -74,11 +74,11 @@ const HomeScreen: React.FC<IRecipeProps> = ({ route }) => {
           title="Map"
           onPress={() => navigation.navigate('Map')}
         /> */}
-        <AppButton
+        {/* <AppButton
           title="ログアウト"
           minWidth={Dimensions.get('window').width - 70}
           onPress={handleSignOut}
-        />
+        /> */}
         {/* <AppButton
           title="Login"
           onPress={() => navigation.navigate('Login')}

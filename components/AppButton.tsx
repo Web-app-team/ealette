@@ -15,6 +15,8 @@ type Props = {
   minWidth?: any;
   width?: any;
   height?: any;
+  disabled?: boolean;
+  opacity?: any;
 };
 
 const AppButton: React.FC<Props> = ({
@@ -27,6 +29,8 @@ const AppButton: React.FC<Props> = ({
   width,
   height,
   minWidth,
+  opacity,
+  disabled,
 }) => {
   return (
     <TouchableOpacity
@@ -42,7 +46,9 @@ const AppButton: React.FC<Props> = ({
         width && { width },
         height && { height },
         minWidth && { minWidth },
+        opacity && { opacity },
       ]}
+      disabled={disabled}
       onPress={onPress}
     >
       <Text style={[styles.appButtonText, color && { color }]}>

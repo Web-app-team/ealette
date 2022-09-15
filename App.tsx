@@ -34,19 +34,20 @@ export default function App() {
             }}
           /> */}
           <HomeStack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <HomeStack.Screen
             name="PreLogin"
             component={PreLoginScreen}
             options={{
               headerShown: false,
             }}
           />
+          <HomeStack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+
           <HomeStack.Screen
             name="Intro"
             component={IntroScreen}

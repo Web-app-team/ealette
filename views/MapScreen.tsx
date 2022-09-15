@@ -75,6 +75,7 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
       latitude: Number(item.latitude),
       longitude: Number(item.longitude),
       address: String(item.address),
+      distance: String(item.distance_string),
     };
   });
 
@@ -131,10 +132,12 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
                     />
                   )}
                 </Text>
-                <Text>
+                <Text style={styles.cardText}>
                   {'\n'}住所：{'\n'}
                   {item.address}
-                  {'\n'}
+                </Text>
+                <Text style={styles.cardText}>
+                  {'\n'}距離：{item.distance}
                 </Text>
               </View>
               {/* <View>
@@ -154,6 +157,7 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexWrap: 'wrap',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -188,7 +192,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.3,
     // shadowOffset: { x: 2, y: -2 },
-    height: 300,
+    height: 320,
     width: 300,
     overflow: 'hidden',
   },
@@ -209,8 +213,9 @@ const styles = StyleSheet.create({
     height: 300,
     width: 300,
   },
-  textContent: {
-    flex: 1,
+  cardText: {
+    alignSelf: 'flex-start',
+    fontSize: 16,
   },
   cardTitle: {
     fontSize: 12,
