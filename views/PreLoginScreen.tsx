@@ -61,7 +61,7 @@ const PreLoginScreen: React.FC = () => {
       headers: {
         'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
         'X-RapidAPI-Key':
-          'c0fa11d7admshc3c2301bdfb27e3p12a19djsn1e5326b5ae48',
+          '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
       },
     };
     const response = await axios.request(options);
