@@ -42,7 +42,6 @@ const Splash: React.FC = () => {
             style={styles.cardImage}
             resizeMode="cover"
           />
-          <Text style={styles.header}>ealette</Text>
 
           <Text style={styles.subHeader}>
             <Octicons name="dash" size={16} color="black" />
@@ -84,28 +83,21 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginLeft: 'auto',
     marginRight: 'auto',
+    width: Dimensions.get('window').width - 160,
   },
   logoContainer: {
-    flex: 3,
+    flex: 2,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    marginTop: '40%',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  header: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 30,
-    marginBottom: 0,
-  },
-
   subHeader: {
-    paddingLeft: 65,
-    paddingRight: 65,
+    paddingLeft: 45,
+    paddingRight: 45,
     fontSize: 16,
     textAlign: 'center',
+    marginTop: -150,
   },
 });
 export default Splash;

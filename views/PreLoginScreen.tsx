@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subHeader: {
-    paddingLeft: 65,
-    paddingRight: 65,
+    paddingLeft: 45,
+    paddingRight: 45,
     fontSize: 16,
     textAlign: 'center',
     marginTop: -150,
