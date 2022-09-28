@@ -105,18 +105,29 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
               latitude: item.latitude,
               longitude: item.longitude,
             }}
-            onCalloutPress={createOpenLink({
-              end: item.address,
-              zoom: 20,
-            })}
           >
-            <Callout tooltip style={styles.card}>
+            <Callout
+              tooltip
+              style={styles.card}
+              onPress={createOpenLink({
+                end: item.address,
+                zoom: 20,
+              })}
+            >
               <View style={styles.cardInfo}>
-                <Text>
+                <Text
+                  style={{
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                  }}
+                >
                   {item.name}
-                  {'\n'}
                 </Text>
-                <Text style={styles.cardImageContainer}>
+                <Text
+                  style={{
+                    marginTop: 10,
+                  }}
+                >
                   {item.image !== null ? (
                     <Image
                       source={{
@@ -127,7 +138,6 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
                   ) : (
                     <Image
                       source={require('../assets/dummy.jpg')}
-                      resizeMode="contain"
                       style={styles.cardImageDummy}
                     />
                   )}
@@ -137,7 +147,7 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
                   {item.address}
                 </Text>
                 <Text style={styles.cardText}>
-                  {'\n'}距離：{item.distance}
+                  距離：{item.distance}
                 </Text>
               </View>
               {/* <View>
@@ -192,9 +202,10 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.3,
     // shadowOffset: { x: 2, y: -2 },
-    height: 320,
+    height: 350,
     width: 300,
     overflow: 'hidden',
+    justifyContent: 'center',
   },
   cardInfo: {
     justifyContent: 'center',
@@ -202,16 +213,17 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
-  cardImageContainer: {
-    marginTop: -140,
-  },
+  cardImageContainer: {},
   cardImage: {
-    height: 300,
-    width: 300,
+    height: 200,
+    maxHeight: 200,
+    width: Dimensions.get('window').width,
   },
   cardImageDummy: {
-    height: 300,
-    width: 300,
+    height: 200,
+    maxHeight: 200,
+    width: Dimensions.get('window').width,
+    resizeMode: 'contain',
   },
   cardText: {
     alignSelf: 'flex-start',

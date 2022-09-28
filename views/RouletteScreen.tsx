@@ -205,7 +205,7 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
         </View>
       ) : (
         <View>
-          <Text style={styles.welcome}>やってみようじゃないか</Text>
+          <Text style={styles.welcome}>ランチを決める</Text>
         </View>
       )}
       <View style={styles.buttonsBox}>{renderCancel()}</View>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
   foodImage: {
     flex: 1,
     justifyContent: 'center',
-    width: 250,
+    width: 200,
   },
   roulette: {
     marginTop: -250,
@@ -258,11 +258,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignSelf: 'center',
     maxWidth: '70%',
-    paddingBottom: 20,
+    paddingBottom: 100,
   },
   buttonsBox2: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 75,
     right: 10,
   },
 });
