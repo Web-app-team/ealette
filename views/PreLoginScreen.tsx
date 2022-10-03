@@ -1,31 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth';
-import { addDoc, collection } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
 import {
-  Alert,
   Dimensions,
   StyleSheet,
   Text,
   View,
   Image,
 } from 'react-native';
-import GestureRecognizer from 'react-native-swipe-gestures';
 import AppButton from '../components/AppButton';
-
 import { Octicons } from '@expo/vector-icons';
 import axios from 'axios';
 import * as Location from 'expo-location';
-import * as SplashScreen from 'expo-splash-screen';
-import Entypo from '@expo/vector-icons/Entypo';
-import * as Font from 'expo-font';
-import Splash from './Splash';
-
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
+import Splashscreen from './Splashscreen';
 
 const PreLoginScreen: React.FC = () => {
   const navigation: any = useNavigation();
@@ -117,17 +103,6 @@ const PreLoginScreen: React.FC = () => {
     prepare();
   }, []);
 
-  // const onLayoutRootView = useCallback(async () => {
-  //   if (appIsReady) {
-  //     // This tells the splash screen to hide immediately! If we call this after
-  //     // `setAppIsReady`, then we may see a blank screen while the app is
-  //     // loading its initial state and rendering its first pixels. So instead,
-  //     // we hide the splash screen once we know the root view has already
-  //     // performed layout.
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [appIsReady]);
-
   const config = {
     velocityThreshold: 0.3,
     directionalOffsetThreshold: 80,
@@ -135,7 +110,7 @@ const PreLoginScreen: React.FC = () => {
 
   return (
     <View style={styles.screen}>
-      <Splash />
+      <Splashscreen />
       <View style={styles.logoContainer}>
         <Image
           source={require('../assets/logo.png')}

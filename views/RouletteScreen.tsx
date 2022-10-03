@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import {
-  Image,
   ImageBackground,
   StyleSheet,
   Text,
@@ -8,11 +7,8 @@ import {
   View,
 } from 'react-native';
 import AppButton from '../components/AppButton';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import SlotMachine from '../components/SlotMachine';
-import AsyncStorage, {
-  useAsyncStorage,
-} from '@react-native-async-storage/async-storage';
 
 interface IRecipeProps {
   route?: any;
@@ -22,27 +18,6 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   const navigation: any = useNavigation();
   const [activeType, setActiveType] = useState<number>(0);
   const [buttonVisible, setButtonVisible] = useState(false);
-  // const [value, setValue] = useState('value');
-  // const { getItem, setItem } = useAsyncStorage('@storage_key');
-
-  // const readItemFromStorage = async () => {
-  //   const item = await getItem();
-  //   setValue(item);
-  // };
-
-  // const writeItemToStorage = async (newValue) => {
-  //   await setItem(newValue);
-  //   setValue(newValue);
-  // };
-
-  // const clearAll = async () => {
-  //   await AsyncStorage.clear();
-  //   console.log('Done.');
-  // };
-
-  // useEffect(() => {
-  //   readItemFromStorage();
-  // }, []);
 
   const toggleCancel = () => {
     setButtonVisible(!buttonVisible);
@@ -138,7 +113,6 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
     const len = restaurantsTypes.length;
     setButtonVisible(!buttonVisible);
     setActiveType(Math.floor(Math.random() * len));
-    // writeItemToStorage(restaurantsTypes[activeType].type);
   };
 
   console.log(restaurantsTypes[activeType].type);
@@ -213,9 +187,8 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
         <View style={styles.buttonsBox2}>
           <AppButton
             title="地図に見る"
-            onPress={
-              () => navigation.navigate('Map', { filteredCompare })
-              // clearAll()
+            onPress={() =>
+              navigation.navigate('Map', { filteredCompare })
             }
           />
         </View>

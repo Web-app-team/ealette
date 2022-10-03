@@ -45,7 +45,7 @@ const IntroScreen: React.FC<IRecipeProps> = ({ route }) => {
   const renderItem = ({ item }: any) => {
     return (
       <View style={styles.screen}>
-        <Image style={styles.image} source={item.image} />
+        <Image source={item.image} />
         <Text style={styles.header}>{item.title}</Text>
         <Text style={styles.welcome}>{item.text}</Text>
       </View>
@@ -72,46 +72,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
   },
-  text: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   header: {
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 40,
   },
-  image: {
-    // marginTop: Dimensions.get('window').height - 750,
-  },
+
   welcome: {
     textAlign: 'center',
     fontSize: 14,
     marginTop: 40,
-  },
-  buttonCircle: {
-    width: 40,
-    height: 40,
-    backgroundColor: 'rgba(0, 0, 0, .2)',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonsBox: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  paragraph: {
-    fontSize: 18,
-    textAlign: 'center',
-  },
-  paragraph2: {
-    flex: 4,
-    overflow: 'visible',
-    fontSize: 16,
-    textAlign: 'center',
   },
 });
 
