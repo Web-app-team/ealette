@@ -105,6 +105,7 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
               latitude: item.latitude,
               longitude: item.longitude,
             }}
+            icon={require('../assets/map-marker.png')}
           >
             <Callout
               tooltip

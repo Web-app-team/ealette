@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -6,9 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import Entypo from '@expo/vector-icons/Entypo';
 import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
 import { Octicons } from '@expo/vector-icons';
 
 // Keep the splash screen visible while we fetch resources
@@ -22,7 +20,7 @@ const Splash: React.FC = () => {
       try {
         // Artificially delay for two seconds to simulate a slow loading
         // experience. Please remove this if you copy and paste the code!
-        await new Promise((resolve) => setTimeout(resolve, 6000));
+        await new Promise((resolve) => setTimeout(resolve, 8000));
       } catch (e) {
         console.warn(e);
       } finally {

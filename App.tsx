@@ -10,8 +10,6 @@ import RegistrationScreen from './views/RegistrationScreen';
 import DetailsScreen from './views/DetailsScreen';
 import MapScreen from './views/MapScreen';
 import IntroScreen from './views/IntroScreen';
-import HomeStackScreen from './views/HomeStackScreen';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function App() {
   const HomeStack = createNativeStackNavigator();
@@ -23,16 +21,6 @@ export default function App() {
     return (
       <NavigationContainer>
         <HomeStack.Navigator>
-          {/* <HomeStack.Screen
-            name="HomeStack"
-            component={HomeStackScreen}
-            options={{
-              headerShown: false,
-              tabBarIcon: ({ color }) => (
-                <Ionicons name="md-home" size={30} color={color} />
-              ),
-            }}
-          /> */}
           <HomeStack.Screen
             name="PreLogin"
             component={PreLoginScreen}
@@ -59,7 +47,6 @@ export default function App() {
             name="ルーレット"
             component={RouletteScreen}
             options={{
-              // headerShown: false,
               headerStyle: {
                 backgroundColor: '#FFDB4F',
               },
@@ -89,46 +76,6 @@ export default function App() {
             component={SettingsScreen}
           />
           <HomeStack.Screen name="Map" component={MapScreen} />
-          {/* <RootTab.Screen
-            name="HomeStack"
-            component={HomeStackScreen}
-            options={{
-              headerShown: false,
-
-              tabBarIcon: ({ color }) => (
-                <Ionicons name="md-home" size={30} color={color} />
-              ),
-            }}
-          />
-          <RootTab.Screen
-            name="お気に入り"
-            component={FavoriteScreen}
-            options={{
-              headerShown: true,
-              tabBarIcon: ({ color }) => (
-                <Ionicons
-                  name="md-settings"
-                  size={30}
-                  color={color}
-                />
-              ),
-            }}
-          />
-          <RootTab.Screen
-            name="マイページ"
-            component={SettingsScreen}
-            options={{
-              // tabBarBadge: 3,
-              headerShown: true,
-              tabBarIcon: ({ color }) => (
-                <Ionicons
-                  name="md-settings"
-                  size={30}
-                  color={color}
-                />
-              ),
-            }}
-          /> */}
         </HomeStack.Navigator>
       </NavigationContainer>
     );
