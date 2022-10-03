@@ -34,7 +34,6 @@ const Splashscreen: React.FC = () => {
           <Image
             source={require('../assets/logo.png')}
             style={styles.cardImage}
-            resizeMode="cover"
           />
 
           <Text style={styles.subHeader}>

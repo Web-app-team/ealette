@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,6 @@ import {
   Animated,
   Easing,
 } from 'react-native';
-import AppButton from './AppButton';
 
 const styles = StyleSheet.create({
   container: {

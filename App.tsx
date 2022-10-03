@@ -48,7 +48,6 @@ export default function App() {
               },
             }}
           />
-
           <HomeStack.Screen name="Map" component={MapScreen} />
         </HomeStack.Navigator>
       </NavigationContainer>

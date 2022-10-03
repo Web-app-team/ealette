@@ -1,9 +1,4 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 type Props = {
   onPress?: VoidFunction;
@@ -68,7 +63,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 12,
     margin: 7,
-    // minWidth: Dimensions.get('window').width - 70,
   },
   appButtonText: {
     fontSize: 14,
