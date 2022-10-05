@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   screen: {
     zIndex: 3,
     elevation: 3,
-    paddingBottom: Dimensions.get('window').height - 450,
+    paddingBottom: '60%',
     justifyContent: 'center',
     alignItems: 'center',
     width: Dimensions.get('window').width,
