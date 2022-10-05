@@ -21,52 +21,7 @@ interface IRecipeProps {
 }
 
 const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
-  const [userLocation, setUserLocation] = useState<
-    object | undefined
-  >();
-  const [errorMsg, setErrorMsg] = useState<string | undefined>();
-  const [latitude, setLatitude] = useState<number | undefined>(
-    35.6988629426
-  );
-  const [longitude, setLongitude] = useState<number | undefined>(
-    139.696601629
-  );
-  const animation = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const source = axios.CancelToken.source();
-
-    const getLocationAsync = async () => {
-      let { status } =
-        await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-      let userLocation = await Location.getCurrentPositionAsync({});
-      setLatitude(userLocation.coords.latitude);
-      setLongitude(userLocation.coords.longitude);
-      setUserLocation(userLocation.coords);
-    };
-    getLocationAsync();
-
-    return () => {
-      source.cancel();
-    };
-  }, []);
-
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (userLocation) {
-    text = JSON.stringify(userLocation);
-  }
-  let location = {
-    latitude: latitude,
-    longitude: longitude,
-    latitudeDelta: 0.009,
-    longitudeDelta: 0.009,
-  };
+  const userLoc = route.params.userLoc;
 
   const staticData = route.params.filteredCompare.map((item: any) => {
     return {
@@ -79,7 +34,12 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
     };
   });
 
-  console.log(userLocation);
+  let location = {
+    latitude: userLoc.latitude,
+    longitude: userLoc.longitude,
+    latitudeDelta: 0.009,
+    longitudeDelta: 0.009,
+  };
 
   return (
     <View style={styles.container}>
@@ -151,13 +111,7 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
                   距離：{item.distance}
                 </Text>
               </View>
-              {/* <View>
-                <AppButton title="Go to rest" />
-              </View> */}
             </Callout>
-
-            {/* <StyledMarker /> */}
-            {/* {item.image} */}
           </Marker>
         ))}
       </MapView>

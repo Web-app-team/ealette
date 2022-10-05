@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../firebase';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import AppButton from '../components/AppButton';
 
@@ -10,7 +9,7 @@ interface IRecipeProps {
 const HomeScreen: React.FC<IRecipeProps> = ({ route }) => {
   const navigation: any = useNavigation();
   const restaurants = route.params;
-  console.log(restaurants);
+  const userLoc = route.params.userLoc;
 
   return (
     <View style={styles.screen}>
@@ -26,7 +25,10 @@ const HomeScreen: React.FC<IRecipeProps> = ({ route }) => {
           title="ルーレットを回す"
           minWidth={Dimensions.get('window').width - 70}
           onPress={() =>
-            navigation.navigate('ルーレット', { restaurants })
+            navigation.navigate('ルーレット', {
+              restaurants,
+              userLoc,
+            })
           }
         />
       </View>

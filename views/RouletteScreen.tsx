@@ -19,6 +19,8 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   const [activeType, setActiveType] = useState<number>(0);
   const [buttonVisible, setButtonVisible] = useState(false);
 
+  const userLoc = route.params.userLoc;
+
   const toggleCancel = () => {
     setButtonVisible(!buttonVisible);
   };
@@ -109,7 +111,7 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   const filteredCompare = compare.filter((el: any) => {
     return el != null;
   });
-  console.log(filteredCompare);
+
   const randomType = (event: any) => {
     event.preventDefault();
     const len = restaurantsTypes.length;
@@ -188,7 +190,7 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
           <AppButton
             title="地図に見る"
             onPress={() =>
-              navigation.navigate('Map', { filteredCompare })
+              navigation.navigate('Map', { filteredCompare, userLoc })
             }
           />
         </View>

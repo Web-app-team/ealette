@@ -54,7 +54,6 @@ const PreLoginScreen: React.FC = () => {
 
     if (response) {
       setDatas(response.data.data);
-      console.log(response.data.data);
     }
   }, [latitude, longitude]);
 
@@ -141,7 +140,10 @@ const PreLoginScreen: React.FC = () => {
           title="始める"
           minWidth={Dimensions.get('window').width - 70}
           onPress={() =>
-            navigation.navigate('Intro', { getPosAndRest: datas })
+            navigation.navigate('Intro', {
+              getPosAndRest: datas,
+              userLoc: userLocation,
+            })
           }
         />
       </View>

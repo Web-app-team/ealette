@@ -16,7 +16,7 @@ interface IRecipeProps {
 const IntroScreen: React.FC<IRecipeProps> = ({ route }) => {
   const navigation: any = useNavigation();
   const restaurants = route.params.getPosAndRest;
-  console.log(restaurants);
+  const userLoc = route.params.userLoc;
 
   const slides = [
     {
@@ -57,7 +57,10 @@ const IntroScreen: React.FC<IRecipeProps> = ({ route }) => {
       data={slides}
       renderItem={renderItem}
       onDone={() =>
-        navigation.navigate('Home', { propsRestaurants: restaurants })
+        navigation.navigate('Home', {
+          propsRestaurants: restaurants,
+          userLoc: userLoc,
+        })
       }
       bottomButton={true}
     />
