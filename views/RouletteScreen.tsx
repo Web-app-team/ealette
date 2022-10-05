@@ -73,7 +73,9 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   });
 
   const restaurantsTypesAll = filtered.map((type: any) => {
-    return { type: type[0].name };
+    if (type[0].key !== 10670) {
+      return { type: type[0].name };
+    }
   });
 
   const restaurantsTypes = restaurantsTypesAll.filter(
@@ -107,15 +109,13 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   const filteredCompare = compare.filter((el: any) => {
     return el != null;
   });
-
+  console.log(filteredCompare);
   const randomType = (event: any) => {
     event.preventDefault();
     const len = restaurantsTypes.length;
     setButtonVisible(!buttonVisible);
     setActiveType(Math.floor(Math.random() * len));
   };
-
-  console.log(restaurantsTypes[activeType].type);
 
   return (
     <View style={styles.screen}>
