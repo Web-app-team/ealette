@@ -22,10 +22,10 @@ const PreLoginScreen: React.FC = () => {
   >();
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const [latitude, setLatitude] = useState<number | undefined>(
-    35.8368658
+    35.6988833
   );
   const [longitude, setLongitude] = useState<number | undefined>(
-    139.6533851
+    139.6966673
   );
   const [datas, setDatas] = useState([] as any[]);
   const [appIsReady, setAppIsReady] = useState(false);
