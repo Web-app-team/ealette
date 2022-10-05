@@ -22,6 +22,7 @@ interface IRecipeProps {
 
 const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
   const userLoc = route.params.userLoc;
+  console.log(userLoc);
 
   const staticData = route.params.filteredCompare.map((item: any) => {
     return {
@@ -35,8 +36,8 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
   });
 
   let location = {
-    latitude: userLoc.latitude,
-    longitude: userLoc.longitude,
+    latitude: Number(userLoc.latitude),
+    longitude: Number(userLoc.longitude),
     latitudeDelta: 0.009,
     longitudeDelta: 0.009,
   };
