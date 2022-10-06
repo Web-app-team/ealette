@@ -1,5 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import {
+  BackHandler,
+  Dimensions,
   ImageBackground,
   StyleSheet,
   Text,
@@ -7,8 +9,9 @@ import {
   View,
 } from 'react-native';
 import AppButton from '../components/AppButton';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SlotMachine from '../components/SlotMachine';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 interface IRecipeProps {
   route?: any;
@@ -18,6 +21,8 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   const navigation: any = useNavigation();
   const [activeType, setActiveType] = useState<number>(0);
   const [buttonVisible, setButtonVisible] = useState(false);
+  const [savedValue, setSavedValue] = useState('value');
+  const { getItem, setItem } = useAsyncStorage('@storage_key');
 
   const userLoc = route.params.userLoc;
 
@@ -25,20 +30,41 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
     setButtonVisible(!buttonVisible);
   };
 
+  const readItemFromStorage = async () => {
+    const item = await getItem();
+    setSavedValue(item);
+  };
+
+  const writeItemToStorage = async (newValue: any) => {
+    await setItem(newValue);
+    setSavedValue(newValue);
+  };
+
+  useEffect(() => {
+    readItemFromStorage();
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true
+    );
+    return () => backHandler.remove();
+  }, []);
+
   const renderCancel = () => {
     if (!buttonVisible) {
       return (
-        <TouchableHighlight onPress={() => toggleCancel()}>
-          <AppButton
-            title="START"
-            onPress={(event: any) => randomType(event)}
-            borderRadius={100}
-            width={100}
-            height={100}
-            backgroundColor={'white'}
-            color="#222222"
-          />
-        </TouchableHighlight>
+        <View>
+          <TouchableHighlight onPress={() => toggleCancel()}>
+            <AppButton
+              title="START"
+              onPress={(event: any) => randomType(event)}
+              borderRadius={100}
+              width={100}
+              height={100}
+              backgroundColor={'white'}
+              color="#222222"
+            />
+          </TouchableHighlight>
+        </View>
       );
     } else {
       return (
@@ -75,20 +101,21 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   });
 
   const restaurantsTypesAll = filtered.map((type: any) => {
-    if (type[0].key !== 10670) {
-      return { type: type[0].name };
-    }
+    return { type: type[0].name };
   });
 
   const restaurantsTypes = restaurantsTypesAll.filter(
     (value: any, index: any) => {
       const _value = JSON.stringify(value);
-      return (
-        index ===
-        restaurantsTypesAll.findIndex((obj: any) => {
-          return JSON.stringify(obj) === _value;
-        })
-      );
+
+      if (value.type !== savedValue && value.type !== 'パブ') {
+        return (
+          index ===
+          restaurantsTypesAll.findIndex((obj: any) => {
+            return JSON.stringify(obj) === _value;
+          })
+        );
+      }
     }
   );
 
@@ -117,6 +144,11 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
     const len = restaurantsTypes.length;
     setButtonVisible(!buttonVisible);
     setActiveType(Math.floor(Math.random() * len));
+  };
+
+  const go = () => {
+    writeItemToStorage(restaurantsTypes[activeType].type);
+    navigation.navigate('Map', { filteredCompare, userLoc });
   };
 
   return (
@@ -182,17 +214,69 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
       ) : (
         <View>
           <Text style={styles.welcome}>ランチを決める</Text>
+          <Text style={styles.lastTimeBoxHeader}>
+            前回のランチは:
+          </Text>
+          <Text style={styles.lastTimeBoxText}>{savedValue}</Text>
+          <ImageBackground
+            source={
+              savedValue === '韓国料理'
+                ? require('../assets/korea.png')
+                : savedValue === '中華料理'
+                ? require('../assets/chinese.png')
+                : savedValue === 'カフェ・喫茶店'
+                ? require('../assets/cafe.png')
+                : savedValue === '和食'
+                ? require('../assets/japanesefood.png')
+                : savedValue === 'イタリアン'
+                ? require('../assets/italian.png')
+                : savedValue === 'ステーキ' ||
+                  savedValue === 'バーベキュー'
+                ? require('../assets/steak.png')
+                : savedValue === 'アジア料理' ||
+                  savedValue === 'ベトナム料理'
+                ? require('../assets/asia.png')
+                : savedValue === 'ヘルシー料理'
+                ? require('../assets/salad.png')
+                : savedValue === 'ファストフード'
+                ? require('../assets/fastfood.png')
+                : savedValue === '肉料理'
+                ? require('../assets/meat.png')
+                : savedValue === '海鮮料理' ||
+                  savedValue === '海鮮・シーフード'
+                ? require('../assets/seafood.png')
+                : savedValue === 'スープ'
+                ? require('../assets/soup.png')
+                : savedValue === 'フレンチ'
+                ? require('../assets/french.png')
+                : savedValue === 'メキシコ料理'
+                ? require('../assets/mexico.png')
+                : savedValue === 'イギリス料理'
+                ? require('../assets/english.png')
+                : savedValue === '寿司'
+                ? require('../assets/sushi.png')
+                : require('../assets/rice.png')
+            }
+            resizeMode="contain"
+            style={styles.lastTimeFoodImage}
+          >
+            <Text style={styles.lastTimeBoxText}> </Text>
+          </ImageBackground>
         </View>
       )}
+
       <View style={styles.buttonsBox}>{renderCancel()}</View>
       {buttonVisible ? (
-        <View style={styles.buttonsBox2}>
-          <AppButton
-            title="地図に見る"
-            onPress={() =>
-              navigation.navigate('Map', { filteredCompare, userLoc })
-            }
-          />
+        <View>
+          <View style={styles.buttonsBox2}>
+            <AppButton title="地図に見る" onPress={() => go()} />
+          </View>
+          <View style={styles.lastTimeBottomBox}>
+            <Text style={styles.lastTimeBottomBoxHeader}>前回:</Text>
+            <Text style={styles.lastTimeBottomBoxText}>
+              {savedValue}
+            </Text>
+          </View>
         </View>
       ) : null}
     </View>
@@ -218,8 +302,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   welcome: {
-    fontSize: 18,
-    marginTop: 200,
+    fontSize: 24,
+    marginTop: 150,
     textAlign: 'center',
   },
   welcome2: {
@@ -237,8 +321,45 @@ const styles = StyleSheet.create({
   },
   buttonsBox2: {
     position: 'absolute',
-    bottom: 75,
-    right: 10,
+    bottom: 125,
+    left: Dimensions.get('window').width - 300,
+  },
+  lastTimeBottomBox: {
+    // borderColor: 'red',
+    // borderStyle: 'dotted',
+    // borderWidth: 2,
+    // borderRadius: 1,
+
+    width: '33%',
+    position: 'absolute',
+    bottom: Dimensions.get('window').height - 540,
+    right: Dimensions.get('window').width - 305,
+  },
+  lastTimeBottomBoxHeader: {
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  lastTimeBottomBoxText: {
+    textAlign: 'center',
+    marginTop: 5,
+  },
+
+  lastTimeBoxHeader: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginTop: '5%',
+  },
+  lastTimeBoxText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: '1%',
+    width: 200,
+  },
+  lastTimeFoodImage: {
+    justifyContent: 'center',
+    width: 200,
+    height: 200,
+    marginTop: -20,
   },
 });
 

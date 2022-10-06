@@ -10,6 +10,7 @@ import {
   View,
   Dimensions,
   Image,
+  BackHandler,
 } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import * as Location from 'expo-location';
@@ -22,11 +23,65 @@ interface IRecipeProps {
 
 const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
   const userLoc = route.params.userLoc;
-  console.log(userLoc);
+
+  const [userLocation, setUserLocation] = useState<
+    object | undefined
+  >();
+  const [errorMsg, setErrorMsg] = useState<string | undefined>();
+  const [latitude, setLatitude] = useState<number | undefined>(
+    35.6988629426
+  );
+  const [longitude, setLongitude] = useState<number | undefined>(
+    139.696601629
+  );
+  const animation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const source = axios.CancelToken.source();
+
+    const getLocationAsync = async () => {
+      let { status } =
+        await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      let userLocation = await Location.getCurrentPositionAsync({});
+      setLatitude(userLocation.coords.latitude);
+      setLongitude(userLocation.coords.longitude);
+      setUserLocation(userLocation.coords);
+    };
+    getLocationAsync();
+
+    return () => {
+      source.cancel();
+    };
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (userLocation) {
+    text = JSON.stringify(userLocation);
+  }
+  let location = {
+    latitude: latitude,
+    longitude: longitude,
+    latitudeDelta: 0.009,
+    longitudeDelta: 0.009,
+  };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true
+    );
+    return () => backHandler.remove();
+  }, []);
 
   const staticData = route.params.filteredCompare.map((item: any) => {
     return {
-      name: String(item.name),
+      name: item.name ? String(item.name) : '名前がない',
       image: item.photo ? item.photo.images.medium.url : null,
       latitude: Number(item.latitude),
       longitude: Number(item.longitude),
@@ -34,13 +89,6 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
       distance: String(item.distance_string),
     };
   });
-
-  let location = {
-    latitude: Number(userLoc.latitude),
-    longitude: Number(userLoc.longitude),
-    latitudeDelta: 0.009,
-    longitudeDelta: 0.009,
-  };
 
   return (
     <View style={styles.container}>

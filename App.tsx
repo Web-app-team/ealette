@@ -43,12 +43,19 @@ export default function App() {
             name="ルーレット"
             component={RouletteScreen}
             options={{
+              headerShown: false,
               headerStyle: {
                 backgroundColor: '#FFDB4F',
               },
             }}
           />
-          <HomeStack.Screen name="Map" component={MapScreen} />
+          <HomeStack.Screen
+            name="Map"
+            component={MapScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
         </HomeStack.Navigator>
       </NavigationContainer>
     );
