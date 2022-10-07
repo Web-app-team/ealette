@@ -52,7 +52,7 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
   const renderCancel = () => {
     if (!buttonVisible) {
       return (
-        <View>
+        <View style={styles.previewStart}>
           <TouchableHighlight onPress={() => toggleCancel()}>
             <AppButton
               title="START"
@@ -212,7 +212,7 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
           </ImageBackground>
         </View>
       ) : (
-        <View>
+        <View style={styles.previewContainer}>
           <Text style={styles.welcome}>ランチを決める</Text>
           <Text style={styles.lastTimeBoxHeader}>
             前回のランチは:
@@ -324,6 +324,7 @@ const styles = StyleSheet.create({
     bottom: 125,
     left: Dimensions.get('window').width - 300,
   },
+
   lastTimeBottomBox: {
     // borderColor: 'red',
     // borderStyle: 'dotted',
@@ -332,8 +333,8 @@ const styles = StyleSheet.create({
 
     width: '33%',
     position: 'absolute',
-    bottom: Dimensions.get('window').height - 540,
-    right: Dimensions.get('window').width - 305,
+    bottom: 130,
+    right: 60,
   },
   lastTimeBottomBoxHeader: {
     fontSize: 18,
@@ -357,10 +358,12 @@ const styles = StyleSheet.create({
   },
   lastTimeFoodImage: {
     justifyContent: 'center',
-    width: 200,
-    height: 200,
+    alignSelf: 'center',
+    width: 150,
+    height: 150,
     marginTop: -20,
   },
+  previewContainer: {},
 });
 
 export default RouletteScreen;

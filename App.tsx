@@ -6,10 +6,14 @@ import HomeScreen from './views/HomeScreen';
 import PreLoginScreen from './views/PreLoginScreen';
 import MapScreen from './views/MapScreen';
 import IntroScreen from './views/IntroScreen';
+import { LogBox } from 'react-native';
 
 export default function App() {
   const HomeStack = createNativeStackNavigator();
   const isLoadingComplete = useCachedResources();
+
+  LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
 
   if (!isLoadingComplete) {
     return null;
@@ -43,7 +47,7 @@ export default function App() {
             name="ルーレット"
             component={RouletteScreen}
             options={{
-              headerShown: false,
+              // headerShown: false,
               headerStyle: {
                 backgroundColor: '#FFDB4F',
               },
@@ -52,9 +56,11 @@ export default function App() {
           <HomeStack.Screen
             name="Map"
             component={MapScreen}
-            options={{
-              headerShown: false,
-            }}
+            options={
+              {
+                // headerShown: false,
+              }
+            }
           />
         </HomeStack.Navigator>
       </NavigationContainer>
