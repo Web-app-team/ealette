@@ -22,10 +22,10 @@ const PreLoginScreen: React.FC = () => {
   >();
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const [latitude, setLatitude] = useState<number | undefined>(
-    35.6988833
+    35.7284007
   );
   const [longitude, setLongitude] = useState<number | undefined>(
-    139.6966673
+    139.7183382
   );
   const [datas, setDatas] = useState([] as any[]);
   const [appIsReady, setAppIsReady] = useState(false);
@@ -47,10 +47,12 @@ const PreLoginScreen: React.FC = () => {
       headers: {
         'X-RapidAPI-Host': 'travel-advisor.p.rapidapi.com',
         'X-RapidAPI-Key':
-          '405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b',
+          'd1680d1748mshfc29e137291208cp168fb8jsn8a7752463e0f',
       },
     };
     const response = await axios.request(options);
+
+    //  405bb09151msh2508b0e503caff8p1e2e06jsn7359fd6fb65b
 
     if (response) {
       setDatas(response.data.data);

@@ -29,10 +29,10 @@ const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
   >();
   const [errorMsg, setErrorMsg] = useState<string | undefined>();
   const [latitude, setLatitude] = useState<number | undefined>(
-    35.6988629426
+    35.7284007
   );
   const [longitude, setLongitude] = useState<number | undefined>(
-    139.696601629
+    139.7183382
   );
   const animation = useRef(new Animated.Value(0)).current;
 
