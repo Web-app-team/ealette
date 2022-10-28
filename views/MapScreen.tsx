@@ -24,67 +24,60 @@ interface IRecipeProps {
 const MapScreen: React.FC<IRecipeProps> = ({ route }) => {
   const userLoc = route.params.userLoc;
 
-  // const [userLocation, setUserLocation] = useState<
-  //   object | undefined
-  // >();
-  // const [errorMsg, setErrorMsg] = useState<string | undefined>();
-  // const [latitude, setLatitude] = useState<number | undefined>(
-  //   35.7284007
-  // );
-  // const [longitude, setLongitude] = useState<number | undefined>(
-  //   139.7183382
-  // );
-  // const animation = useRef(new Animated.Value(0)).current;
+  const [userLocation, setUserLocation] = useState<
+    object | undefined
+  >();
+  const [errorMsg, setErrorMsg] = useState<string | undefined>();
+  const [latitude, setLatitude] = useState<number | undefined>(
+    35.7284007
+  );
+  const [longitude, setLongitude] = useState<number | undefined>(
+    139.7183382
+  );
+  const animation = useRef(new Animated.Value(0)).current;
 
-  // useEffect(() => {
-  //   const source = axios.CancelToken.source();
+  useEffect(() => {
+    const source = axios.CancelToken.source();
 
-  //   const getLocationAsync = async () => {
-  //     let { status } =
-  //       await Location.requestForegroundPermissionsAsync();
-  //     if (status !== 'granted') {
-  //       setErrorMsg('Permission to access location was denied');
-  //       return;
-  //     }
-  //     let userLocation = await Location.getCurrentPositionAsync({});
-  //     setLatitude(userLocation.coords.latitude);
-  //     setLongitude(userLocation.coords.longitude);
-  //     setUserLocation(userLocation.coords);
-  //   };
-  //   getLocationAsync();
+    const getLocationAsync = async () => {
+      let { status } =
+        await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      let userLocation = await Location.getCurrentPositionAsync({});
+      setLatitude(userLocation.coords.latitude);
+      setLongitude(userLocation.coords.longitude);
+      setUserLocation(userLocation.coords);
+    };
+    getLocationAsync();
 
-  //   return () => {
-  //     source.cancel();
-  //   };
-  // }, []);
+    return () => {
+      source.cancel();
+    };
+  }, []);
 
-  // let text = 'Waiting..';
-  // if (errorMsg) {
-  //   text = errorMsg;
-  // } else if (userLocation) {
-  //   text = JSON.stringify(userLocation);
-  // }
-  // let location = {
-  //   latitude: latitude,
-  //   longitude: longitude,
-  //   latitudeDelta: 0.009,
-  //   longitudeDelta: 0.009,
-  // };
-
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (userLocation) {
+    text = JSON.stringify(userLocation);
+  }
   let location = {
-    latitude: userLoc.latitude,
-    longitude: userLoc.longitude,
+    latitude: latitude,
+    longitude: longitude,
     latitudeDelta: 0.009,
     longitudeDelta: 0.009,
   };
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => true
-    );
-    return () => backHandler.remove();
-  }, []);
+  // useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     () => true
+  //   );
+  //   return () => backHandler.remove();
+  // }, []);
 
   const staticData = route.params.filteredCompare.map((item: any) => {
     return {

@@ -42,17 +42,17 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
 
   useEffect(() => {
     readItemFromStorage();
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => true
-    );
-    return () => backHandler.remove();
+    // const backHandler = BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   () => true
+    // );
+    // return () => backHandler.remove();
   }, []);
 
   const renderCancel = () => {
     if (!buttonVisible) {
       return (
-        <View style={styles.previewStart}>
+        <View>
           <TouchableHighlight onPress={() => toggleCancel()}>
             <AppButton
               title="START"
@@ -95,6 +95,7 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
         }
       )
     : null;
+  console.log(restaurantData);
 
   const filtered = restaurantData.filter((el: any) => {
     return el != null;
@@ -118,6 +119,7 @@ const RouletteScreen: React.FC<IRecipeProps> = ({ route }) => {
       }
     }
   );
+  console.log(restaurantsTypes[activeType]);
 
   const compare = route.params.restaurants.propsRestaurants.map(
     (restaurant: any) => {
@@ -322,7 +324,7 @@ const styles = StyleSheet.create({
   buttonsBox2: {
     position: 'absolute',
     bottom: 125,
-    left: Dimensions.get('window').width - 300,
+    left: '15%',
   },
 
   lastTimeBottomBox: {

@@ -27,6 +27,7 @@ const PreLoginScreen: React.FC = () => {
   const [longitude, setLongitude] = useState<number | undefined>(
     139.7183382
   );
+
   const [datas, setDatas] = useState([] as any[]);
   const [appIsReady, setAppIsReady] = useState(false);
 
@@ -93,7 +94,7 @@ const PreLoginScreen: React.FC = () => {
   useEffect(() => {
     async function prepare() {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 6000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       } catch (e) {
         console.warn(e);
       } finally {
@@ -108,6 +109,7 @@ const PreLoginScreen: React.FC = () => {
     velocityThreshold: 0.3,
     directionalOffsetThreshold: 80,
   };
+  console.log(datas);
 
   return (
     <View style={styles.screen}>
